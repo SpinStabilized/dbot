@@ -143,7 +143,6 @@ class Die:
         if keep_drop:
             fn = keep_drop[0]
             number = int(keep_drop[1:])
-            # number = -number if fn == 'k' else number
             results.sort(key=lambda x: x.value)
             if fn == 'k':
                 keep = results[-number:]
@@ -155,7 +154,6 @@ class Die:
                 drop = results[-number:]
                 for d in drop: d.keep = False
                 results = keep + drop
-        logger.info(results)
         return results
 
     @staticmethod
@@ -176,9 +174,7 @@ class Die:
         """
         roll_exp = roll
         dice_rolls = re.findall(Die.DICE_REGEX, roll)
-        # logger.info(dice_rolls)
         dice_results = [Die.multi_roll(r) for r in dice_rolls]
-        # logger.info(dice_results)
         for i, r in enumerate(dice_rolls):
             str_result = '+'.join([str(d.value) for d in dice_results[i]])
             fstr_result = '+'.join([str(d) for d in dice_results[i]])
