@@ -65,7 +65,21 @@ roll specification to identify exploding dice.
 Example: Roll the same damage roll as above but allows for exploding dice rather \
 than the x3 critical.
 >.roll 2d8!+9+1d6!
-[5+**8**+__2__]+9+[**6**+__5__] = 35 
+[5+**8**+__2__]+9+[**6**+__5__] = 35
+
+Finally, the bot allows a specification of the top number of dice to drop or keep. \
+This allows for rolling and having to keep the better results or the worse results. \
+**NOTE:** This behavior is different than the Roll20 dice rolls where drop drops the \
+lowest values.
+
+Example: Roll 5d6 and keep the best 2.
+>.roll 5d6k2
+ [~~2~~+~~2~~+~~3~~+3+5] = 8
+
+Example: Roll 2d20 and drop the best result.
+>.roll 2d20d1
+[15+~~19~~] = 15
+
 """
         await ctx.reply(help_str)
 
@@ -84,12 +98,13 @@ class Die:
     def __init__(self, sides:int, exploded:bool=False) -> None:
         self.sides = sides
         self.exploded = exploded
+        self.keep = True
         self.roll
 
-    DICE_REGEX = re.compile(r'(\d+d\d+[!]{0,1})')
+    DICE_REGEX = re.compile(r'(\d+d\d+[!]{0,1}(?:[k|d]\d+){0,1})')
     """:obj:`str` : A regex string find dice rolls in a larger string."""
 
-    DICE_SPEC = re.compile(r'(\d+)d(\d+)([!]{0,1})')
+    DICE_SPEC = re.compile(r'(\d+)d(\d+)([!]{0,1})((?:[k|d]\d+){0,1})')
     """:obj:`str` : A regex string to define the components of a die roll."""
 
     @classmethod
@@ -110,18 +125,37 @@ class Die:
 
         """
         parsed = re.findall(Die.DICE_SPEC, dice_spec)
-        number_of_dice, number_of_sides, explode = \
-            parsed[0] if parsed else (None, None, None)
-
-        results = [cls(int(number_of_sides)) for _ in range(int(number_of_dice))]
+        dice, sides, explode, keep_drop = \
+            parsed[0] if parsed else (None, None, None, None)
+        dice, sides, exploded = \
+            int(dice), int(sides), bool(explode)
+        
+        results = [cls(sides) for _ in range(dice)]
+        results.sort(key=lambda x: x.value)
         if explode == '!':
             explode_results = []
             for r in results:
                 explode_results.append(r)
                 while explode_results[-1].critical_hit:
-                    explode_results.append(cls(int(number_of_sides), True))
+                    explode_results.append(cls(sides, True))
             results = explode_results[:]
 
+        if keep_drop:
+            fn = keep_drop[0]
+            number = int(keep_drop[1:])
+            # number = -number if fn == 'k' else number
+            results.sort(key=lambda x: x.value)
+            if fn == 'k':
+                keep = results[-number:]
+                drop = results[:-number]
+                for d in drop: d.keep = False
+                results = drop + keep
+            elif fn == 'd':
+                keep = results[:-number]
+                drop = results[-number:]
+                for d in drop: d.keep = False
+                results = keep + drop
+        logger.info(results)
         return results
 
     @staticmethod
@@ -142,7 +176,9 @@ class Die:
         """
         roll_exp = roll
         dice_rolls = re.findall(Die.DICE_REGEX, roll)
+        # logger.info(dice_rolls)
         dice_results = [Die.multi_roll(r) for r in dice_rolls]
+        # logger.info(dice_results)
         for i, r in enumerate(dice_rolls):
             str_result = '+'.join([str(d.value) for d in dice_results[i]])
             fstr_result = '+'.join([str(d) for d in dice_results[i]])
@@ -155,11 +191,13 @@ class Die:
         return roll, utils.basiceval.basic_eval(roll_exp)
 
     def __str__(self):
-        ret_val = str(self.value)
+        ret_val = str(self.__value)
         if self.critical_hit or self.critical_fail:
             ret_val = f'**{ret_val}**'
         if self.exploded:
             ret_val = f'__{ret_val}__'
+        if not self.keep:
+            ret_val = f'~~{ret_val}~~'
         return ret_val
 
     @property
@@ -187,7 +225,7 @@ class Die:
             The value of the last die roll.
 
         """
-        return self.__value
+        return self.__value if self.keep else 0
     
     @property
     def critical_hit(self) -> bool:

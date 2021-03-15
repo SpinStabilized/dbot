@@ -19,7 +19,8 @@ logger.addHandler(handler)
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
-bot = commands.Bot(command_prefix='.')
+PREFIX = os.getenv('DISCORD_BOT_PREFIX')
+bot = commands.Bot(command_prefix=PREFIX)
 
 @bot.event
 async def on_ready():
