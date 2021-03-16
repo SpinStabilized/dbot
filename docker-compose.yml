@@ -1,0 +1,10 @@
+version: '3.4'
+
+services:
+  dbot:
+    env_file: 
+      - .env
+    image: dbot
+    build:
+      context: .
+      dockerfile: ./Dockerfile
