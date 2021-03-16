@@ -35,6 +35,7 @@ class RollDice(commands.Cog):
             logger.info(f'    Result: {results} = {total}')
         except pyparsing.ParseException as pe:
             response =  'Error in dice string at underline.'
+            logger.error(pe)
             error_pos = dice_string[:pe.col-1] + f'__{dice_string[pe.col-1]}__' + dice_string[pe.col:]
             await ctx.reply(response + '\n' + error_pos)
             logger.error(response)
@@ -182,8 +183,8 @@ class Die:
             str_result_exp = f'({str_result})'
             roll = roll.replace(r, str_result_disp, 1)
             roll_exp = roll_exp.replace(r, str_result_exp, 1)
-            result = utils.basiceval.basic_eval(roll_exp)
-
+        
+        result = utils.basiceval.basic_eval(roll_exp)
         return roll, utils.basiceval.basic_eval(roll_exp)
 
     def __str__(self):
