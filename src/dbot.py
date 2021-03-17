@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import discord
 import logging
 import logging.handlers
 import os
@@ -20,18 +21,19 @@ logger.addHandler(handler)
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
-print(TOKEN)
 PREFIX = os.getenv('DISCORD_BOT_PREFIX')
 bot = commands.Bot(command_prefix=PREFIX)
 
 @bot.event
 async def on_ready():
     logger.info(f'{bot.user.name} has connected to Discord!')
+    await bot.change_presence(activity=discord.Game(f"with {len(bot.guilds)} servers"), afk=True)
 
 if __name__ == "__main__":
 
     cog_extensions = [
-        'cogs.rolldice'
+        'cogs.rolldice',
+        'cogs.admin'
     ]
 
     for cog_ext in cog_extensions:

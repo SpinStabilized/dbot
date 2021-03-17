@@ -30,9 +30,10 @@ class RollDice(commands.Cog):
         logger.info(f'Roll request from {ctx.author}')
         logger.info(f'    {dice_string}')
         try:
-            results, total = Die.dice_roller(dice_string)
-            await ctx.reply(f'{results} = {total}')
-            logger.info(f'    Result: {results} = {total}')
+            async with ctx.typing():
+                results, total = Die.dice_roller(dice_string)
+                await ctx.reply(f'{results} = {total}')
+                logger.info(f'    Result: {results} = {total}')
         except pyparsing.ParseException as pe:
             response =  'Error in dice string at underline.'
             logger.error(pe)
