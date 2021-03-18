@@ -33,7 +33,8 @@ if __name__ == "__main__":
 
     cog_extensions = [
         'cogs.rolldice',
-        'cogs.admin'
+        'cogs.admin',
+        'cogs.bgg'
     ]
 
     for cog_ext in cog_extensions:

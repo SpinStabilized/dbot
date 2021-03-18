@@ -7,6 +7,8 @@ name = "pypi"
 discord = "*"
 python-dotenv = "*"
 pyparsing = "*"
+xmltodict = "*"
+requests = "*"
 
 [dev-packages]
 
