@@ -19,11 +19,13 @@ class BggBot(commands.Cog):
     @commands.command(aliases=['bggh'], help='Get the top n games from the BGG Hot list. Default 10, max 50.')
     async def bgg_hot(self, ctx, *, number: int=10) -> None:
         logger.info(f'{ctx.author} requested the top {number} hottest games from BGG')
-        hot_games = bggif.hot.HotGame.get_hot_games()
-        for game in hot_games[:number]:
-            async with ctx.typing():
-                hot_embed = as_disc_embed(ctx, game)
-            await ctx.reply(embed=hot_embed)
+        embed_list = []
+        async with ctx.typing():
+            hot_games = bggif.hot.HotGame.get_hot_games()
+            for game in hot_games[:number]:
+                embed_list.append(hot_embed(ctx, game))
+        for e in embed_list:
+            await ctx.reply(embed=e)
 
     @commands.command(aliases=['bggu'], help='Get info on a BGG user.')
     async def bgg_user(self, ctx, *, username: str='') -> None:
