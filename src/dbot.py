@@ -3,6 +3,7 @@ import discord
 import logging
 import logging.handlers
 import os
+import platform
 import signal
 import sys
 
@@ -28,6 +29,10 @@ bot = commands.Bot(command_prefix=PREFIX)
 async def on_ready():
     logger.info(f'{bot.user.name} has connected to Discord!')
     await bot.change_presence(activity=discord.Game(f"with {len(bot.guilds)} servers"), afk=True)
+    logger.info(f'Logged in as {bot.user.name}')
+    logger.info(f'Discord.py API version: {discord.__version__}')
+    logger.info(f'Python version: {platform.python_version()}')
+    logger.info(f'Running on: {platform.system()} {platform.release()} ({os.name})')
 
 if __name__ == "__main__":
 

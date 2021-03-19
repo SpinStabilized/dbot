@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import annotations
 
-import requests
+import aiohttp
 import xmltodict
 
 from typing import List
@@ -25,18 +25,20 @@ class HotGame:
         return f'<HotGame - {self.name}>'
     
     @classmethod
-    def get_hot_games(cls) -> List[HotGame]:
+    async def get_hot_games(cls) -> List[HotGame]:
         params = 'hot?boardgame'
         full_bgg_url = BASE_URI + params
-        response = requests.get(full_bgg_url)
         game_list = None
-        if response.status_code == 200:
-            game_data = xmltodict.parse(response.text)['items']['item']
-            game_list = [cls(**i) for i in game_data]
+        async with aiohttp.ClientSession() as session:
+            async with session.get(full_bgg_url) as response:
+                if response.status == 200:
+                    raw_xml = await response.text()
+                    game_data = xmltodict.parse(raw_xml)['items']['item']
+                    game_list = [cls(**i) for i in game_data]
         return game_list
 
     @property
-    def get_site_url(self) -> str:
+    def bgg_url(self) -> str:
         return SITE_BASE_URL + str(self.id) + '/'
 
 

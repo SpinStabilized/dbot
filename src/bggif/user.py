@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 from __future__ import annotations
 
-
-import requests
+import aiohttp
 import xmltodict
+import yarl
 
 from datetime import date, timedelta
 from typing import List
@@ -19,6 +19,8 @@ class User:
         self.first_name = kwargs.get('firstname', '').get('@value', '')
         self.last_name = kwargs.get('lastname', '').get('@value', '')
         self.avatar = kwargs.get('avatarlink', '').get('@value', '')
+        if self.avatar == 'N/A':
+            self.avatar = ''
         self.year_registered = kwargs.get('yearregistered', '').get('@value', '')
         self.last_login = kwargs.get('lastlogin', '').get('@value', '')
         if self.last_login:
@@ -36,13 +38,15 @@ class User:
         
     
     @classmethod
-    def get_user(self, username: str='') -> List[User]:
+    async def get_user(self, username: str='') -> List[User]:
         uri = BASE_URI + 'user'
         parameters = {'name':username}
-        response = requests.get(uri, params=parameters)
         user = None
-        if response.status_code == 200:
-            user = User(**xmltodict.parse(response.text)['user'])
+        async with aiohttp.ClientSession() as session:
+            async with session.get(uri, params=parameters) as response:
+                if response.status == 200:
+                    raw_xml = await response.text()
+                    user = User(**xmltodict.parse(raw_xml)['user'])
         return user
     
     @property
@@ -51,12 +55,24 @@ class User:
     
     @property
     def bgg_url(self) -> str:
-        return SITE_BASE_URL + self.name
+        user_uri = str(yarl.URL(self.name))
+        return SITE_BASE_URL + user_uri
     
     @property
     def login_delta(self) -> int:
-        time_since = date.today() - self.last_login
-        return time_since.days
+        if self.valid and self.last_login != '':
+            time_since = date.today() - self.last_login
+            return time_since.days
+        else:
+            return -1
+        
+    @property
+    def full_name(self) -> str:
+        return f'{self.first_name} {self.last_name}'
+    
+    @property
+    def location(self) -> str:
+        return f'{self.state_or_province}, {self.country}'
 
 if __name__ == '__main__':
     user = User.get_user('scifilaura')

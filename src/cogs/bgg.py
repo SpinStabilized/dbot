@@ -21,7 +21,7 @@ class BggBot(commands.Cog):
         logger.info(f'{ctx.author} requested the top {number} hottest games from BGG')
         embed_list = []
         async with ctx.typing():
-            hot_games = bggif.hot.HotGame.get_hot_games()
+            hot_games = await bggif.hot.HotGame.get_hot_games()
             for game in hot_games[:number]:
                 embed_list.append(hot_embed(ctx, game))
         for e in embed_list:
@@ -31,8 +31,9 @@ class BggBot(commands.Cog):
     async def bgg_user(self, ctx, *, username: str='') -> None:
         logger.info(f'{ctx.author} requested info on BGG user {username}.')
         async with ctx.typing():
-            user = bggif.user.User.get_user(username)
+            user = await bggif.user.User.get_user(username)
             user_info = user_embed(ctx, user)
+        
         await ctx.reply(embed=user_info)
 
 def user_embed(ctx, user:bggif.user.User) -> discord.Embed:
@@ -43,21 +44,25 @@ def user_embed(ctx, user:bggif.user.User) -> discord.Embed:
     else:
         user_embed = discord.Embed(color=discord.Color.light_grey())
         user_embed.title = f'BGG User Information'
-        print(user.avatar)
-        if user.avatar != 'N/A':
-            user_embed.set_author(name=user.name, icon_url=user.avatar, url=user.bgg_url)
+        if user.avatar:
+            user_embed.set_author(name=user.name, icon_url=user.avatar)
         else:
-            user_embed.set_author(name=user.name, url=user.bgg_url)
-        user_embed.add_field(name='Full Name', value=f'{user.first_name} {user.last_name}', inline=True)
-        user_embed.add_field(name='Year Registered', value=user.year_registered, inline=True)
-        user_embed.add_field(name='Days Since Last Login', value=user.login_delta)
-        user_embed.add_field(name='Location', value=f'{user.state_or_province}, {user.country}')
+            user_embed.set_author(name=user.name)
+        user_embed.add_field(name='BGG Homepage', value=f"[{user.name}'s BGG Homepage]({user.bgg_url})", inline=False)
+        if user.full_name != ' ':
+            user_embed.add_field(name='Full Name', value=user.full_name)
+        user_embed.add_field(name='Year Registered', value=user.year_registered)
+        if user.login_delta != -1:
+            user_embed.add_field(name='Days Since Last Login', value=user.login_delta)
+        if user.location != ', ':
+            user_embed.add_field(name='Location', value=user.location, inline=False)
     return user_embed
 
 def hot_embed(ctx, game) -> discord.Embed:
     hot_embed = discord.Embed(color=discord.Color.light_grey())
     # hot_embed.title = f'#{game.rank} - {game.name} ({game.year_published})'
-    hot_embed.set_author(name=f'#{game.rank} - {game.name} ({game.year_published})', icon_url=game.thumbnail, url=game.get_site_url)
+    hot_embed.set_author(name=f'#{game.rank} - {game.name} ({game.year_published})', icon_url=game.thumbnail)
+    hot_embed.add_field(name='BGG URL', value=f'[{game.name} on BGG]({game.bgg_url})')
     # hot_embed.set_thumbnail(url=game.thumbnail)
     hot_embed.set_footer(text="BGG The Hotness Boardgames List")
     return hot_embed
