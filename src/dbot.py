@@ -34,6 +34,29 @@ async def on_ready():
     logger.info(f'Python version: {platform.python_version()}')
     logger.info(f'Running on: {platform.system()} {platform.release()} ({os.name})')
 
+@bot.event
+async def on_guild_join(g):
+    await bot.change_presence(activity=discord.Game(f"with {len(bot.guilds)} servers"), afk=True)
+
+@bot.event
+async def on_guild_remove(g):
+    await bot.change_presence(activity=discord.Game(f"with {len(bot.guilds)} servers"), afk=True)
+
+@bot.event
+async def on_command_error(ctx, error):
+
+    if isinstance(error, commands.CommandNotFound):  # fails silently
+        ctx.send(error)
+
+    elif isinstance(error, commands.CommandOnCooldown):
+        await ctx.send(f'This command is on cooldown. Please wait {error.retry_after:.2f}s')
+
+    elif isinstance(error, commands.MissingPermissions):
+        await ctx.send('You do not have the permissions to use this command.')
+    # If any other error occurs, prints to console.
+    else:
+        logger.error(''.join(traceback.format_exception(type(error), error, error.__traceback__)))
+
 if __name__ == "__main__":
 
     cog_extensions = [
