@@ -46,13 +46,13 @@ async def on_guild_remove(g):
 async def on_command_error(ctx, error):
 
     if isinstance(error, commands.CommandNotFound):  # fails silently
-        ctx.send(error)
+        await ctx.reply(error)
 
     elif isinstance(error, commands.CommandOnCooldown):
-        await ctx.send(f'This command is on cooldown. Please wait {error.retry_after:.2f}s')
+        await ctx.reply(f'This command is on cooldown. Please wait {error.retry_after:.2f}s')
 
     elif isinstance(error, commands.MissingPermissions):
-        await ctx.send('You do not have the permissions to use this command.')
+        await ctx.reply('You do not have the permissions to use this command.')
     # If any other error occurs, prints to console.
     else:
         logger.error(''.join(traceback.format_exception(type(error), error, error.__traceback__)))
