@@ -6,6 +6,7 @@ import os
 import platform
 import signal
 import sys
+import traceback
 
 from discord.ext import commands
 from dotenv import load_dotenv
@@ -62,7 +63,8 @@ if __name__ == "__main__":
     cog_extensions = [
         'cogs.rolldice',
         'cogs.admin',
-        'cogs.bgg'
+        'cogs.bgg',
+        'cogs.fun'
     ]
 
     for cog_ext in cog_extensions:
