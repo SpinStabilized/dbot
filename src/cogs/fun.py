@@ -1,11 +1,14 @@
 # -*- coding: utf-8 -*-
-import cowsay
 import discord
 import logging
+import subprocess
 
 from discord.ext import commands
 
 logger = logging.getLogger('dbot')
+
+COWSAY = '/usr/games/cowsay'
+COWTHINK = '/usr/games/cowthink'
 
 class FunBot(commands.Cog):
 
@@ -13,20 +16,27 @@ class FunBot(commands.Cog):
         self.bot = bot
         logger.info('FunBot Cog Loaded')
     
-    @commands.command(aliases=['cs'], help='Fun message from a cow')
+    @commands.command(aliases=['cs'], help='cowthink [-e eye_string] [-f cowfile] [-l] [-n] [-T tongue_string] [-W column] [-bdgpstwy]')
     async def cowsay(self, ctx, *, message='Moo'):
-        msg_words = message.split(' ')
-        creature = msg_words[0] \
-            if msg_words[0] in cowsay.char_names \
-                else 'cow'
-        send_msg = ' '.join(msg_words[1:]) \
-            if creature != 'cow' \
-                else message
-        fn = cowsay.chars[list(cowsay.char_names).index(creature)] \
-            if creature in cowsay.char_names \
-                else cowsay.chars[list(cowsay.char_names).index('cow')]
-        await ctx.send(f'```{fn(send_msg)}```')
+        async with ctx.typing():
+            args = message.split(' ')
+            if '-h' in args:
+                data = '-h switch not available in bot'
+            else:
+                data = subprocess.check_output([COWSAY] + args)
+                data = data.decode('UTF-8')
+        await ctx.send(f'```{data}```')
 
+    @commands.command(aliases=['ct'], help='cowthink [-e eye_string] [-f cowfile] [-l] [-n] [-T tongue_string] [-W column] [-bdgpstwy]')
+    async def cowthink(self, ctx, *, message='Moo'):
+        async with ctx.typing():
+            args = message.split(' ')
+            if '-h' in args:
+                data = '-h switch not available in bot'
+            else:
+                data = subprocess.check_output([COWTHINK] + args)
+                data = data.decode('UTF-8')
+        await ctx.send(f'```{data}```')
 
 def setup(bot: "Bot") -> None:
     """Add this :obj:`discord.ext.command.Cog` to the identified :obj:`discord.ext.command.Bot`.
