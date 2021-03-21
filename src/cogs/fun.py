@@ -9,6 +9,7 @@ logger = logging.getLogger('dbot')
 
 COWSAY = '/usr/games/cowsay'
 COWTHINK = '/usr/games/cowthink'
+FORTUNE = '/usr/games/fortune'
 
 class FunBot(commands.Cog):
 
@@ -16,27 +17,32 @@ class FunBot(commands.Cog):
         self.bot = bot
         logger.info('FunBot Cog Loaded')
     
-    @commands.command(aliases=['cs'], help='cowthink [-e eye_string] [-f cowfile] [-l] [-n] [-T tongue_string] [-W column] [-bdgpstwy]')
-    async def cowsay(self, ctx, *, message='Moo'):
+    @commands.command(aliases=['cs'], help='cowsay [-e eye_string] [-f cowfile] [-l] [-n] [-T tongue_string] [-W column] [-bdgpstwy]')
+    async def cowsay(self, ctx, *, message:str='Moo'):
         async with ctx.typing():
             args = message.split(' ')
-            if '-h' in args:
-                data = '-h switch not available in bot'
-            else:
-                data = subprocess.check_output([COWSAY] + args)
-                data = data.decode('UTF-8')
-        await ctx.send(f'```{data}```')
+            data = subprocess.run([COWSAY] + args, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
+        await ctx.send(f'```{data.stdout}```')
 
     @commands.command(aliases=['ct'], help='cowthink [-e eye_string] [-f cowfile] [-l] [-n] [-T tongue_string] [-W column] [-bdgpstwy]')
-    async def cowthink(self, ctx, *, message='Moo'):
+    async def cowthink(self, ctx, *, message:str='Moo'):
         async with ctx.typing():
             args = message.split(' ')
-            if '-h' in args:
-                data = '-h switch not available in bot'
-            else:
-                data = subprocess.check_output([COWTHINK] + args)
-                data = data.decode('UTF-8')
-        await ctx.send(f'```{data}```')
+            data = subprocess.run([COWTHINK] + args,
+                   stdout=subprocess.PIPE,
+                   stderr=subprocess.STDOUT,
+                   text=True)
+        await ctx.send(f'```{data.stdout}```')
+
+    @commands.command(help='fortune [-afilosw] [-m pattern] [-n number]')
+    async def fortune(self, ctx, *, ignore:None=None):
+        async with ctx.typing():
+            data = subprocess.run([FORTUNE], 
+                   stdout=subprocess.PIPE,
+                   stderr=subprocess.STDOUT,
+                   text=True)
+        await ctx.send(f'```{data.stdout}```')
+
 
 def setup(bot: "Bot") -> None:
     """Add this :obj:`discord.ext.command.Cog` to the identified :obj:`discord.ext.command.Bot`.
