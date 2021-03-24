@@ -9,7 +9,7 @@ from typing import List
 
 import utils
 
-logger = logging.getLogger('dbot')
+logger = utils.get_dbot_logger()
 
 class RollDice(commands.Cog):
     """Dice rolling cog.

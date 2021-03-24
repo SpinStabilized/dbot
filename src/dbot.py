@@ -33,24 +33,24 @@ async def on_ready():
 
 @bot.event
 async def on_guild_join(g):
-    await bot.change_presence(activity=discord.Game(f"with {len(bot.guilds)} servers"), afk=True)
+    await bot.change_presence(activity=discord.Game(f'with {len(bot.guilds)} servers'), afk=True)
 
 @bot.event
 async def on_guild_remove(g):
-    await bot.change_presence(activity=discord.Game(f"with {len(bot.guilds)} servers"), afk=True)
+    await bot.change_presence(activity=discord.Game(f'with {len(bot.guilds)} servers'), afk=True)
 
 @bot.event
 async def on_command_error(ctx, error):
 
-    if isinstance(error, commands.CommandNotFound):  # fails silently
+    if isinstance(error, commands.CommandNotFound): 
         await ctx.reply(error)
 
     elif isinstance(error, commands.CommandOnCooldown):
-        await ctx.reply(f'This command is on cooldown. Please wait {error.retry_after:.2f}s')
+        await ctx.reply(f'This command is on cooldown. Please wait {error.retry_after:.0f}s')
 
     elif isinstance(error, commands.MissingPermissions):
-        await ctx.reply('You do not have the permissions to use this command.')
-    # If any other error occurs, prints to console.
+        await ctx.reply('You are not authorized to use this command.')
+
     else:
         logger.error(''.join(traceback.format_exception(type(error), error, error.__traceback__)))
 

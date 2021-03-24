@@ -24,7 +24,7 @@
   <h3 align="center">DBot</h3>
 
   <p align="center">
-    An awesome README template to jumpstart your projects!
+    Another discord bot!
     <!--<br />
     <a href="https://github.com/SpinStabilized/dbot"><strong>Explore the docs »</strong></a>
     <br />
