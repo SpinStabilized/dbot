@@ -34,6 +34,8 @@
     <a href="https://github.com/SpinStabilized/dbot/issues">Report Bug</a>
     ·
     <a href="https://github.com/SpinStabilized/dbot/issues">Request Feature</a>
+    ·
+    <a href="https://discordapp.com/oauth2/authorize?client_id=820034148471144480&scope=bot&permissions=268905542">Invite Me</a>
   </p>
 </p>
 
