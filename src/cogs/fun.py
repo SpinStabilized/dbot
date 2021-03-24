@@ -5,7 +5,9 @@ import subprocess
 
 from discord.ext import commands
 
-logger = logging.getLogger('dbot')
+import utils
+
+logger = utils.get_dbot_logger()
 
 COWSAY = '/usr/games/cowsay'
 COWTHINK = '/usr/games/cowthink'

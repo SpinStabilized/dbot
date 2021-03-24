@@ -7,7 +7,7 @@ import re
 from discord.ext import commands
 from typing import List
 
-import utils.basiceval
+import utils
 
 logger = logging.getLogger('dbot')
 
@@ -185,8 +185,8 @@ class Die:
             roll = roll.replace(r, str_result_disp, 1)
             roll_exp = roll_exp.replace(r, str_result_exp, 1)
         
-        result = utils.basiceval.basic_eval(roll_exp)
-        return roll, utils.basiceval.basic_eval(roll_exp)
+        result = utils.basic_eval(roll_exp)
+        return roll, result
 
     def __str__(self):
         ret_val = str(self.__value)

@@ -4,9 +4,9 @@ import logging
 
 from discord.ext import commands
 
-import utils.sec
+import utils
 
-logger = logging.getLogger('dbot')
+logger = utils.get_dbot_logger()
 
 class BotAdmin(commands.Cog):
     def __init__(self, bot: "Bot") -> None:
@@ -14,7 +14,7 @@ class BotAdmin(commands.Cog):
         logger.info('BotAdmin Cog Loaded')
     
     @commands.command(aliases=['sd'], hidden=True)
-    @utils.sec.dev_only()
+    @utils.dev_only()
     async def shutdown(self, ctx, *, foo=None) -> None:
         logger.warning(f'SHUTDOWN REQUESTED FROM VALID DEVELOPER {ctx.author}')
         await ctx.send(f"DBot is shutting down at {ctx.author}'s request.")

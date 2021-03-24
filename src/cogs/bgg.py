@@ -8,8 +8,9 @@ from discord.ext import commands
 
 import bggif.hot
 import bggif.user
+import utils
 
-logger = logging.getLogger('dbot')
+logger = utils.get_dbot_logger()
 
 class BggBot(commands.Cog):
     def __init__(self, bot: Bot) -> None:

@@ -1,27 +1,23 @@
 # -*- coding: utf-8 -*-
+"""The DBot, yet another custom discord bot.
+
+
+"""
+from __future__ import annotations
+
 import discord
-import logging
-import logging.handlers
+import dotenv
 import os
 import platform
-import signal
-import sys
 import traceback
 
 from discord.ext import commands
-from dotenv import load_dotenv
 
-logger = logging.getLogger('dbot')
-logger.setLevel(logging.DEBUG)
-# handler = logging.handlers.RotatingFileHandler(filename='dbot.log', encoding='utf-8',maxBytes=1024*1024, backupCount=10)
-handler = logging.StreamHandler()
-handler.setFormatter(
-    logging.Formatter(fmt='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                      datefmt='%Y-%m-%d %H:%M:%S')
-)
-logger.addHandler(handler)
+import utils
 
-load_dotenv()
+logger = utils.dbot_logger_config()
+
+dotenv.load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 PREFIX = os.getenv('DISCORD_BOT_PREFIX')
 bot = commands.Bot(command_prefix=PREFIX)
