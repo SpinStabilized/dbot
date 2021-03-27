@@ -12,14 +12,7 @@ import utils
 logger = utils.get_dbot_logger()
 
 class RollDice(commands.Cog):
-    """Dice rolling cog.
-
-    Parameters
-    ----------
-    bot : :obj:`discord.ext.command.Bot`
-        The controlling Bot.
-    
-    """
+    """Dice rolling cog."""
 
     def __init__(self, bot: "Bot"):
         self.bot = bot

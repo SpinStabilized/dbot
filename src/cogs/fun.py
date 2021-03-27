@@ -14,6 +14,7 @@ COWTHINK = '/usr/games/cowthink'
 FORTUNE = '/usr/games/fortune'
 
 class FunBot(commands.Cog):
+    """Some fun commands."""
 
     def __init__(self, bot:'Bot') -> None:
         self.bot = bot

@@ -9,6 +9,7 @@ python-dotenv = "*"
 pyparsing = "*"
 xmltodict = "*"
 requests = "*"
+discord-pretty-help = "*"
 
 [dev-packages]
 

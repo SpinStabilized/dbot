@@ -13,6 +13,7 @@ import utils
 logger = utils.get_dbot_logger()
 
 class BggBot(commands.Cog):
+    """Board Game Geek Commands"""
     def __init__(self, bot: Bot) -> None:
         self.bot = bot
         logger.info('BggBot Cog Loaded')

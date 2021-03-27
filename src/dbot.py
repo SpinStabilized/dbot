@@ -9,6 +9,7 @@ import discord
 import dotenv
 import os
 import platform
+import pretty_help
 import traceback
 
 from discord.ext import commands
@@ -21,6 +22,11 @@ dotenv.load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 PREFIX = os.getenv('DISCORD_BOT_PREFIX')
 bot = commands.Bot(command_prefix=PREFIX)
+
+bot.help_command = pretty_help.PrettyHelp(
+    color=discord.Color.dark_gold(),
+    ending_note=f'For more details try advanced_help.'
+)
 
 @bot.event
 async def on_ready():
