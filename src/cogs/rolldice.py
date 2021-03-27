@@ -42,48 +42,6 @@ class RollDice(commands.Cog):
             logger.error(response)
             logger.error(error_pos)
 
-    @commands.command(help='More advanced information on a dice roll.')
-    async def roll_help(self, ctx, *, ignore=None) -> None:
-        help_str = """\
-Dice rolls follow the form of <number of dice>d<number of sides> in a manner \
-similar to the Roll20 specification. It also supports the basic math functions \
-to add and subtract bonuses or multiply values.
-
-Example: Roll a single D20.
->.roll 1d20
-[18] = 18
-
-Example: Roll two D8, add a bonus, and an additional D6 for extra damage.
->.roll 2d8+9+1d6
-[1+5]+9+[4] = 19
-
-Example: Roll the same damage roll as above but as a x3 critical.
->.roll 3\*(2d8+9+1d6)
-3\*([6+4]+9+[**6**]) = 75
-
-Additionally, the bot allows for the use of a '!' character at the end of each \
-roll specification to identify exploding dice.
-
-Example: Roll the same damage roll as above but allows for exploding dice rather \
-than the x3 critical.
->.roll 2d8!+9+1d6!
-[5+**8**+__2__]+9+[**6**+__5__] = 35
-
-Finally, the bot allows a specification of the top number of dice to drop or keep. \
-This allows for rolling and having to keep the better results or the worse results. \
-**NOTE:** This behavior is different than the Roll20 dice rolls where drop drops the \
-lowest values.
-
-Example: Roll 5d6 and keep the best 2.
->.roll 5d6k2
- [~~2~~+~~2~~+~~3~~+3+5] = 8
-
-Example: Roll 2d20 and drop the best result.
->.roll 2d20d1
-[15+~~19~~] = 15
-
-"""
-        await ctx.reply(help_str)
 
 class Die:
     """An object that models a die roll and tracks critical hits/fails.

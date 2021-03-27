@@ -37,7 +37,7 @@ class FunBot(commands.Cog):
         await ctx.send(f'```{data.stdout}```')
 
     @commands.command(help='fortune [-afilosw] [-m pattern] [-n number]')
-    async def fortune(self, ctx, *, ignore:None=None):
+    async def fortune(self, ctx):
         async with ctx.typing():
             data = subprocess.run([FORTUNE], 
                    stdout=subprocess.PIPE,
