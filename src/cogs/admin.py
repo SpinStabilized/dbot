@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import datetime
 import discord
-import logging
+import numexpr as ne
 
 from discord.ext import commands
 
@@ -71,7 +71,14 @@ class BotAdmin(commands.Cog):
         em.description = f'For more help information [visit the help homepage](https://spinstabilized.github.io/dbot-ref/dbot-ref/).'
         await ctx.send(embed=em)
     
-    
+    @commands.command(help='A handy calculator.')
+    async def calc(self, ctx, calculation):
+        async with ctx.typing():
+            pi = 3.14159
+            e = 2.71828
+            result = ne.evaluate(calculation).item()
+        await ctx.reply(f'Result: {result}')
+
 
 def setup(bot: "Bot") -> None:
     """Add this :obj:`discord.ext.command.Cog` to the identified :obj:`discord.ext.command.Bot`.

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import logging
-import pyparsing
+import numexpr as ne
 import random
 import re
 
@@ -22,18 +22,10 @@ class RollDice(commands.Cog):
     async def roll(self, ctx, *, dice_string: str = None) -> None:
         logger.info(f'Roll request from {ctx.author}')
         logger.info(f'    {dice_string}')
-        try:
-            async with ctx.typing():
-                results, total = Die.dice_roller(dice_string)
-                await ctx.reply(f'{results} = {total}')
-                logger.info(f'    Result: {results} = {total}')
-        except pyparsing.ParseException as pe:
-            response =  'Error in dice string at underline.'
-            logger.error(pe)
-            error_pos = dice_string[:pe.col-1] + f'__{dice_string[pe.col-1]}__' + dice_string[pe.col:]
-            await ctx.reply(response + '\n' + error_pos)
-            logger.error(response)
-            logger.error(error_pos)
+        async with ctx.typing():
+            results, total = Die.dice_roller(dice_string)
+        await ctx.reply(f'{results} = {total}')
+        logger.info(f'    Result: {results} = {total}')
 
 
 class Die:
@@ -136,7 +128,7 @@ class Die:
             roll = roll.replace(r, str_result_disp, 1)
             roll_exp = roll_exp.replace(r, str_result_exp, 1)
         
-        result = utils.basic_eval(roll_exp)
+        result = ne.evaluate(roll_exp).item()
         return roll, result
 
     def __str__(self):
