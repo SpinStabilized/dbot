@@ -1,4 +1,6 @@
 import logging
+import math
+import numexpr as ne
 import os
 
 from discord.ext import commands
@@ -37,5 +39,19 @@ def dev_only():
         return False
     return commands.check(wrapper)
 
+def eval_expr(expr:str='0') -> float:
+    """Evaluate a string as a math expression.
 
+    Parameters
+    ----------
+    expr
+        An expression, as a :class:`str`, to evaluate.
+    
+    """
+    pi = math.pi
+    e = math.pi
+    tau = math.tau
+
+    result = ne.evaluate(expr).item()
+    return result
 

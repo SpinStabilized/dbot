@@ -3,7 +3,6 @@ from __future__ import annotations
 
 import datetime
 import discord
-import numexpr as ne
 
 from discord.ext import commands
 
@@ -74,9 +73,8 @@ class BotAdmin(commands.Cog):
     @commands.command(help='A handy calculator.')
     async def calc(self, ctx, calculation):
         async with ctx.typing():
-            pi = 3.14159
-            e = 2.71828
-            result = ne.evaluate(calculation).item()
+            result = utils.eval_expr(calculation)
+            # result = ne.evaluate(calculation).item()
         await ctx.reply(f'Result: {result}')
 
 

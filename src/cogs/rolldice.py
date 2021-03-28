@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import logging
-import numexpr as ne
 import random
 import re
 
@@ -128,7 +127,7 @@ class Die:
             roll = roll.replace(r, str_result_disp, 1)
             roll_exp = roll_exp.replace(r, str_result_exp, 1)
         
-        result = ne.evaluate(roll_exp).item()
+        result = utils.eval_expr(roll_exp)
         return roll, result
 
     def __str__(self):
