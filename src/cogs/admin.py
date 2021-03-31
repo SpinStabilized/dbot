@@ -17,14 +17,6 @@ class BotAdmin(commands.Cog):
         logger.info('BotAdmin Cog Loaded')
         self.start_time = datetime.datetime.now()
     
-    @commands.command(aliases=['sd'], hidden=True)
-    @utils.dev_only()
-    async def shutdown(self, ctx) -> None:
-        logger.warning(f'SHUTDOWN REQUESTED FROM VALID DEVELOPER {ctx.author}')
-        await ctx.send(f"DBot is shutting down at {ctx.author}'s request.")
-        await self.bot.change_presence(activity=None, status=discord.Status.offline, afk=True)
-        await self.bot.logout()
-
     @commands.command(name='about', help='About DBot')
     async def about(self, ctx) -> None:
         up = self.start_time - datetime.datetime.now()
@@ -44,6 +36,53 @@ class BotAdmin(commands.Cog):
             em.set_footer(text="DBot is powered by discord.py")
         await ctx.send(embed=em)
 
+    @commands.command(help='Advanced Help')
+    async def advanced_help(self, ctx):
+        em = discord.Embed(color=discord.Color.dark_gold())
+        em.title = "Advanced Help"
+        em.description = f'For more help information [visit the help homepage](https://spinstabilized.github.io/dbot-ref/dbot-ref/).'
+        await ctx.send(embed=em)
+
+    @commands.command(help='A handy calculator.')
+    async def calc(self, ctx, calculation):
+        async with ctx.typing():
+            result = utils.eval_expr(calculation)
+        await ctx.reply(f'Result: {result}')
+
+    @commands.command(hidden=True)
+    @utils.dev_only()
+    async def log_get(self, ctx):
+        logger.info(f'Log file requested by authorized user {ctx.author}')
+        await ctx.reply(file=discord.File(str(utils.DBOT_LOG_FILE)))
+
+    @commands.command(hidden=True)
+    @utils.dev_only()
+    async def log_tail(self, ctx, n: int = 10):
+        logger.info(f'Log tail of {n} lines requested by authorized user {ctx.author}')
+        log_lines = ''
+        with open(utils.DBOT_LOG_FILE, 'r') as log:
+            log_lines = ''.join(log.readlines()[-n:])
+        await ctx.reply(f'```{log_lines}```')
+
+    @commands.command(help='Check DBot Latency')
+    async def ping(self, ctx):
+        async with ctx.typing():
+            em = discord.Embed(color=discord.Color.green())
+            em.title = "Ping Response"
+            em.description = f'{self.bot.latency * 1000:0.2f} ms'
+        await ctx.send(embed=em)
+
+    @commands.command(aliases=['sd'], hidden=True)
+    @utils.dev_only()
+    async def shutdown(self, ctx) -> None:
+        logger.warning(f'SHUTDOWN REQUESTED FROM VALID DEVELOPER {ctx.author}')
+        logger.warning(f'Providing most recent log before shutdown.')
+        await ctx.send(f"DBot is shutting down at {ctx.author}'s request.")
+        await ctx.send(f'Providing most recent log before shutdown.')
+        await ctx.send(file=discord.File(str(utils.DBOT_LOG_FILE)))
+        await self.bot.change_presence(activity=None, status=discord.Status.offline, afk=True)
+        await self.bot.logout()
+
     @commands.command(name='uptime', help='DBot Uptime')
     async def uptime(self, ctx) -> None:
         up = self.start_time - datetime.datetime.now()
@@ -54,28 +93,6 @@ class BotAdmin(commands.Cog):
             em.description = str(datetime.datetime.now() - self.start_time)
             em.set_footer(text="DBot is powered by discord.py")
         await ctx.send(embed=em)
-
-    @commands.command(help='Check DBot Latency')
-    async def ping(self, ctx):
-        async with ctx.typing():
-            em = discord.Embed(color=discord.Color.green())
-            em.title = "Ping Response"
-            em.description = f'{self.bot.latency * 1000:0.2f} ms'
-        await ctx.send(embed=em)
-    
-    @commands.command(help='Advanced Help')
-    async def advanced_help(self, ctx):
-        em = discord.Embed(color=discord.Color.dark_gold())
-        em.title = "Advanced Help"
-        em.description = f'For more help information [visit the help homepage](https://spinstabilized.github.io/dbot-ref/dbot-ref/).'
-        await ctx.send(embed=em)
-    
-    @commands.command(help='A handy calculator.')
-    async def calc(self, ctx, calculation):
-        async with ctx.typing():
-            result = utils.eval_expr(calculation)
-            # result = ne.evaluate(calculation).item()
-        await ctx.reply(f'Result: {result}')
 
 
 def setup(bot: "Bot") -> None:
