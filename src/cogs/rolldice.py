@@ -69,7 +69,7 @@ class RollDice(commands.Cog):
             logger.info(f'Simulating dice roll from {ctx.author}')
             logger.info(f'\t{dice_string}')
             try:
-                mean, stdev, fname = Die.dice_sim(args.roll_spec, args.n_times)
+                fname = Die.dice_sim(args.roll_spec, args.n_times)
             except SyntaxError as se:
                 roll_exception = se
                 logger.exception(se)
@@ -80,13 +80,11 @@ class RollDice(commands.Cog):
             p_file = discord.File(fname, filename='image.png')
             embed = discord.Embed(
                 title='Dice Roll Simulator',
-                description=f'Statistical results of rolling {args.roll_spec} {args.n_times:,} times.',
                 color=0x00ff00
             )
             embed.set_image(url='attachment://image.png')
-            embed.add_field(name='Mean', value=f'{mean:0.2f}', inline=True)
-            embed.add_field(name='Standard Deviation', value=f'{stdev:0.2f}', inline=True)
             await ctx.reply(embed=embed, file=p_file)
+            os.remove(fname)
 
 
 class Die:
@@ -215,14 +213,14 @@ class Die:
 
         ax.set_xlabel('Result')
         ax.set_ylabel('Probability Density')
-        ax.set_title(f'Histogram of {roll} Rolled {n:,} Times')
+        ax.set_title(f'Histogram of {roll} Rolled {n:,} Times\n$\mu={mean:0.0f}, \sigma={stdev:0.2f}$')
         now = datetime.now()
         fname = f'/tmp/dbot_roll_sim_{now.strftime("%Y_%m_%d_%H_%M_%S")}.png'
         fig.tight_layout()
         fig.savefig(fname)
         logger.debug(fname)
 
-        return mean, stdev, fname
+        return fname
 
     def __str__(self):
         ret_val = str(self.__value)
