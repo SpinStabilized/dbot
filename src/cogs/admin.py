@@ -46,8 +46,14 @@ class BotAdmin(commands.Cog):
     @commands.command(help='A handy calculator.')
     async def calc(self, ctx, calculation):
         async with ctx.typing():
-            result = utils.eval_expr(calculation)
-        await ctx.reply(f'Result: {result}')
+            try:
+                result = utils.eval_expr(calculation)
+                result = f'Results: {result}'
+            except SyntaxError as se:
+                result = '```Syntax Error In Expression\n'
+                result += f'\t{se.text}\n'
+                result += f'\t{" " * (se.offset-1)}^```'
+        await ctx.reply(result)
 
     @commands.command(hidden=True)
     @utils.dev_only()

@@ -31,23 +31,41 @@ class RollDice(commands.Cog):
     async def roll(self, ctx, *, dice_string: str = None) -> None:
         logger.info(f'Roll request from {ctx.author}')
         logger.info(f'\t{dice_string}')
+        
+        roll_exception = None
         async with ctx.typing():
-            results, total = Die.dice_roller(dice_string)
-        await ctx.reply(f'{results} = {total}')
-        logger.info(f'\tResult: {results} = {total}')
+            try:
+                results, total = Die.dice_roller(dice_string)
+            except SyntaxError as se:
+                roll_exception = se
+                logger.exception(se)
+        if roll_exception:
+            await ctx.reply(f'Error In Dice Roll')
+        else:
+            await ctx.reply(f'{results} = {total}')
+            logger.info(f'\tResult: {results} = {total}')
 
     @commands.command(help='Dice roll simulator/statistics generator')
     async def roll_sim(self, ctx, *, dice_string: str = None) -> None:
-        parser = argparse.ArgumentParser()
-        parser.add_argument('-n', '--n_times', default=10000, type=int)
-        parser.add_argument('roll_spec', nargs='*')
-        args = parser.parse_args(dice_string.split())
-        args.roll_spec = ' '.join(args.roll_spec)
-
-        logger.info(f'Simulating dice roll from {ctx.author}')
-        logger.info(f'\t{dice_string}')
+        roll_exception = None
         async with ctx.typing():
-            mean, stdev, fname = Die.dice_sim(args.roll_spec, args.n_times)
+            parser = argparse.ArgumentParser()
+            parser.add_argument('-n', '--n_times', default=10000, type=int)
+            parser.add_argument('roll_spec', nargs='*')
+            args = parser.parse_args(dice_string.split())
+            args.roll_spec = ' '.join(args.roll_spec)
+
+            logger.info(f'Simulating dice roll from {ctx.author}')
+            logger.info(f'\t{dice_string}')
+            try:
+                mean, stdev, fname = Die.dice_sim(args.roll_spec, args.n_times)
+            except SyntaxError as se:
+                roll_exception = se
+                logger.exception(se)
+            
+        if roll_exception:
+            await ctx.reply(f'Error In Dice Roll')
+        else:
             p_file = discord.File(fname, filename='image.png')
             embed = discord.Embed(
                 title='Dice Roll Simulator',
