@@ -3,9 +3,20 @@ import argparse
 from datetime import datetime
 import logging
 import math
+import os
+import pathlib
 import random
 import re
 import statistics
+
+###############################################################################
+# Configure the MPLCONFIGDIR environmental variable to give matplotlib a place
+# to work in the user access area in the Docker container.
+###############################################################################
+mpl_config = pathlib.Path.cwd() / 'mpl_config'
+mpl_config.mkdir(parents=True, exist_ok=True)
+os.environ['MPLCONFIGDIR'] = str(mpl_config)
+###############################################################################
 
 import matplotlib as mpl
 mpl.use('Agg')
