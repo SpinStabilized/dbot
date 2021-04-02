@@ -54,12 +54,15 @@ def search_item_embed(ctx, search_items: List[bggif.search.SearchItem]) -> disco
     search_embed = discord.Embed(color=discord.Color.light_grey())
     search_embed.title = f'BGG Search Results'
     response_strs = []
-    for i, item in enumerate(search_items):
-        search_embed.add_field(
-            name=f'{i+1:02})',
-            value=f'[{item.name}]({item.bgg_url}) - (c){item.year_published}',
-            inline=False
-        )
+    if search_items:
+        for i, item in enumerate(search_items):
+            search_embed.add_field(
+                name=f'{i+1:02})',
+                value=f'[{item.name}]({item.bgg_url}) - (c){item.year_published}',
+                inline=False
+            )
+    else:
+        search_embed.description('No Results')
     return search_embed
 
 def user_embed(ctx, user:bggif.user.User) -> discord.Embed:

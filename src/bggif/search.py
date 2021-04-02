@@ -32,10 +32,11 @@ class SearchItem:
             async with session.get(uri, params=parameters) as response:
                 if response.status == 200:
                     raw_xml = await response.text()
-                    results = xmltodict.parse(raw_xml)['items']['item']
-                    if len(results) > 10:
+                    results = xmltodict.parse(raw_xml)['items'].get('item', None)
+                    if results and len(results) > 10:
                         results = results[:10]
-                    results = [SearchItem(**result) for result in results]
+                    if results:
+                        results = [SearchItem(**result) for result in results]
         return results
 
     @property
