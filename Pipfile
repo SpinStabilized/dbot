@@ -4,7 +4,6 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-discord = "*"
 python-dotenv = "*"
 pyparsing = "*"
 xmltodict = "*"
@@ -12,6 +11,7 @@ requests = "*"
 discord-pretty-help = "*"
 numexpr = "*"
 matplotlib = "*"
+"discord.py" = ">=1.7.2"
 
 [dev-packages]
 
