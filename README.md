@@ -97,7 +97,7 @@ To get up and running with DBot:
 
 ### Prerequisites
 
-The only pre-requisits to get up and running are Python 3 with `pipenv`. While `pipenv` is not required it makes installation of packages for the project trivial.
+The only pre-requisites to get up and running are Python 3 with `pipenv`. While `pipenv` is not required it makes installation of packages for the project trivial.
 
 * Python 3
   This is highly system dependent. On Windows I recommend using [Windows Subsystem for Linux](https://docs.microsoft.com/en-us/windows/wsl/install-win10) or [Chocolatey](https://chocolatey.org/) and on OS X I can *highly* recommend [Homebrew](https://brew.sh/).
@@ -127,7 +127,7 @@ Additionally, the project is built with containers in mind so you can install [D
    ```sh
    DISCORD_TOKEN=your_token_here
    DISCORD_BOT_PREFIX=your_prefix_char_here
-   DISCORD_BOT_DEVELOPERS=semicolon_seperated_developer_id_list
+   DISCORD_BOT_DEVELOPERS=semicolon_separated_developer_id_list
    ```
 4. To execute the bot in the `pipenv` environment you can execute it directly
    ```sh
@@ -142,7 +142,7 @@ Additionally, the project is built with containers in mind so you can install [D
 ```sh
 docker-compose -f "docker-compose.yml" up -d --build
 ```
-6. If you are using Docker and add any modules with `pipenv install`, make sure you freeze the environment before you run the Docker compose. If you are in a *nix shell (Linux, WSL, OS X) there is a convinience script included
+6. If you are using Docker and add any modules with `pipenv install`, make sure you freeze the environment before you run the Docker compose. If you are in a *nix shell (Linux, WSL, OS X) there is a convenience script included
 ```sh
 ./freeze.sh
 ```

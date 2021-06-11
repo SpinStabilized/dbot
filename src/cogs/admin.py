@@ -87,7 +87,7 @@ class BotAdmin(commands.Cog):
         await ctx.send(f'Providing most recent log before shutdown.')
         await ctx.send(file=discord.File(str(utils.DBOT_LOG_FILE)))
         await self.bot.change_presence(activity=None, status=discord.Status.offline, afk=True)
-        await self.bot.logout()
+        await self.bot.close()
 
     @commands.command(name='uptime', help='DBot Uptime')
     async def uptime(self, ctx) -> None:
