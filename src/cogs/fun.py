@@ -16,7 +16,7 @@ FORTUNE = '/usr/games/fortune'
 class FunBot(commands.Cog):
     """Some fun commands."""
 
-    def __init__(self, bot:'Bot') -> None:
+    def __init__(self, bot:commands.Bot) -> None:
         self.bot = bot
         logger.info('FunBot Cog Loaded')
     
@@ -47,7 +47,7 @@ class FunBot(commands.Cog):
         await ctx.send(f'```{data.stdout}```')
 
 
-def setup(bot: "Bot") -> None:
+def setup(bot: commands.Bot) -> None:
     """Add this :obj:`discord.ext.command.Cog` to the identified :obj:`discord.ext.command.Bot`.
 
     Parameters

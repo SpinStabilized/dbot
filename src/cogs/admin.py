@@ -12,7 +12,7 @@ logger = utils.get_dbot_logger()
 
 class BotAdmin(commands.Cog):
     """Administrative Commands"""
-    def __init__(self, bot: "Bot") -> None:
+    def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
         logger.info('BotAdmin Cog Loaded')
         self.start_time = datetime.datetime.now()
@@ -101,7 +101,7 @@ class BotAdmin(commands.Cog):
         await ctx.send(embed=em)
 
 
-def setup(bot: "Bot") -> None:
+def setup(bot: commands.Bot) -> None:
     """Add this :obj:`discord.ext.command.Cog` to the identified :obj:`discord.ext.command.Bot`.
 
     Parameters

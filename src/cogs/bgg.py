@@ -17,7 +17,7 @@ logger = utils.get_dbot_logger()
 
 class BggBot(commands.Cog):
     """Board Game Geek Commands"""
-    def __init__(self, bot: Bot) -> None:
+    def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
         logger.info('BggBot Cog Loaded')
     
@@ -96,7 +96,7 @@ def hot_embed(ctx, game) -> discord.Embed:
     hot_embed.set_footer(text="BGG The Hotness Boardgames List")
     return hot_embed
 
-def setup(bot: "Bot") -> None:
+def setup(bot: commands.Bot) -> None:
     """Add this :obj:`discord.ext.command.Cog` to the identified :obj:`discord.ext.command.Bot`.
 
     Parameters

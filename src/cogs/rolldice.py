@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from __future__ import annotations
+
 import argparse
 from datetime import datetime
 import logging
@@ -25,7 +27,7 @@ import matplotlib.ticker as mtick
 
 import discord
 from discord.ext import commands
-from typing import List, Tuple
+from typing import List, Tuple, Union
 
 import utils
 
@@ -34,7 +36,7 @@ logger = utils.get_dbot_logger()
 class RollDice(commands.Cog):
     """Dice rolling cog."""
 
-    def __init__(self, bot: "Bot"):
+    def __init__(self, bot: commands.Bot):
         self.bot = bot
         logger.info('RollDice Cog Loaded')
     
@@ -161,7 +163,7 @@ class Die:
         return results
 
     @staticmethod
-    def dice_roller(roll:str) -> (str, int):
+    def dice_roller(roll:str) -> Union[str, int]:
         """Processes a dice roll string.
 
         Parameters
@@ -283,7 +285,7 @@ class Die:
         """
         return self.__value == 1
 
-def setup(bot: "Bot") -> None:
+def setup(bot: commands.Bot) -> None:
     """Add this :obj:`discord.ext.command.Cog` to the identified :obj:`discord.ext.command.Bot`.
 
     Parameters

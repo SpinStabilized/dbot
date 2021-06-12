@@ -23,7 +23,7 @@ class SearchItem:
         return f'<Item - {self.name}>'
     
     @classmethod
-    async def search(self, search_str: str='') -> List[BggItems]:
+    async def search(self, search_str: str='') -> List[SearchItem]:
         cleaned_search: str = search_str.replace(' ', '+')
         uri = BASE_URI + 'search'
         parameters = {'query':cleaned_search}
