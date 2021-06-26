@@ -81,7 +81,7 @@ Another discord bot build for fun. Originally intended as a Dice Rolling bot but
 
 Some features I am considering for the future include:
 
-* Get the latest images from the Curiosity or Perserverance Rovers
+* Get the latest images from the Curiosity or Perseverance Rovers
 * View upcoming space launches
 
 ### Built With
