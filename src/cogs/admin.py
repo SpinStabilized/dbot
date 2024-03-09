@@ -40,7 +40,7 @@ class BotAdmin(commands.Cog):
     async def advanced_help(self, ctx):
         em = discord.Embed(color=discord.Color.dark_gold())
         em.title = "Advanced Help"
-        em.description = f'For more help information [visit the help homepage](https://spinstabilized.github.io/dbot-ref/dbot-ref/).'
+        em.description = f'For more help information [visit the help homepage](https://spinstabilized.github.io/projects/dbot/).'
         await ctx.send(embed=em)
 
     @commands.command(help='A handy calculator.')

@@ -189,7 +189,7 @@ Distributed under the MIT License. See `LICENSE` for more information.
 <!-- CONTACT -->
 ## Contact
 
-Brian McLaughlin - [@bjmclaughlin](https://twitter.com/bjmclaughlin) - bjmclauglin@gmail.com
+Brian McLaughlin - bjmclauglin@gmail.com
 
 Project Link: [https://github.com/SpinStabilized/dbot](https://github.com/SpinStabilized/dbot)
 
