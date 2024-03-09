@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-import discord
-import logging
 import subprocess
 
 from discord.ext import commands

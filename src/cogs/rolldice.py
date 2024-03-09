@@ -3,8 +3,6 @@ from __future__ import annotations
 
 import argparse
 from datetime import datetime
-import logging
-import math
 import os
 import pathlib
 import random

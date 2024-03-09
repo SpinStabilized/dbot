@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 import discord
-import logging
 
 from discord.ext import commands
 
