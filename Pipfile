@@ -11,7 +11,7 @@ requests = "*"
 discord-pretty-help = "*"
 numexpr = "*"
 matplotlib = "*"
-"discord.py" = ">=1.7.2"
+"discord.py" = "*"
 
 [dev-packages]
 

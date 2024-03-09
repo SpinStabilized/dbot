@@ -9,9 +9,9 @@ import utils
 
 logger = utils.get_dbot_logger()
 
-COWSAY = '/usr/games/cowsay'
-COWTHINK = '/usr/games/cowthink'
-FORTUNE = '/usr/games/fortune'
+COWSAY = '/opt/homebrew/bin/cowsay'#'/usr/games/cowsay'
+COWTHINK = '/opt/homebrew/bin/cowthink'#'/usr/games/cowthink'
+FORTUNE = '/opt/homebrew/bin/fortune'#'/usr/games/fortune'
 
 class FunBot(commands.Cog):
     """Some fun commands."""
@@ -47,7 +47,7 @@ class FunBot(commands.Cog):
         await ctx.send(f'```{data.stdout}```')
 
 
-def setup(bot: commands.Bot) -> None:
+async def setup(bot: commands.Bot) -> None:
     """Add this :obj:`discord.ext.command.Cog` to the identified :obj:`discord.ext.command.Bot`.
 
     Parameters
@@ -57,4 +57,4 @@ def setup(bot: commands.Bot) -> None:
         will be added to.
     
     """
-    bot.add_cog(FunBot(bot))
+    await bot.add_cog(FunBot(bot))

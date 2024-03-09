@@ -285,7 +285,7 @@ class Die:
         """
         return self.__value == 1
 
-def setup(bot: commands.Bot) -> None:
+async def setup(bot: commands.Bot) -> None:
     """Add this :obj:`discord.ext.command.Cog` to the identified :obj:`discord.ext.command.Bot`.
 
     Parameters
@@ -295,4 +295,4 @@ def setup(bot: commands.Bot) -> None:
         will be added to.
     
     """
-    bot.add_cog(RollDice(bot))
+    await bot.add_cog(RollDice(bot))

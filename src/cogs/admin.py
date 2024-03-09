@@ -24,7 +24,7 @@ class BotAdmin(commands.Cog):
             '''Shows info about bot'''
             em = discord.Embed(color=discord.Color.green())
             em.title = 'About DBot'
-            em.set_author(name=ctx.author.name, icon_url=ctx.author.avatar_url)
+            em.set_author(name=ctx.author.name, icon_url=ctx.author.default_avatar)
             em.description = 'The DBot'
             em.add_field(name='Servers', value=len(self.bot.guilds))
             em.add_field(name='Bot Latency', value=f"{self.bot.ws.latency * 1000:.0f} ms")
@@ -86,7 +86,8 @@ class BotAdmin(commands.Cog):
         await ctx.send(f"DBot is shutting down at {ctx.author}'s request.")
         await ctx.send(f'Providing most recent log before shutdown.')
         await ctx.send(file=discord.File(str(utils.DBOT_LOG_FILE)))
-        await self.bot.change_presence(activity=None, status=discord.Status.offline, afk=True)
+        await self.bot.change_presence(activity=None, status=discord.Status.offline)
+        
         await self.bot.close()
 
     @commands.command(name='uptime', help='DBot Uptime')
@@ -101,7 +102,7 @@ class BotAdmin(commands.Cog):
         await ctx.send(embed=em)
 
 
-def setup(bot: commands.Bot) -> None:
+async def setup(bot: commands.Bot) -> None:
     """Add this :obj:`discord.ext.command.Cog` to the identified :obj:`discord.ext.command.Bot`.
 
     Parameters
@@ -111,4 +112,4 @@ def setup(bot: commands.Bot) -> None:
         will be added to.
     
     """
-    bot.add_cog(BotAdmin(bot))
+    await bot.add_cog(BotAdmin(bot))

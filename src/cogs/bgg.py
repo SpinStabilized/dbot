@@ -96,7 +96,7 @@ def hot_embed(ctx, game) -> discord.Embed:
     hot_embed.set_footer(text="BGG The Hotness Boardgames List")
     return hot_embed
 
-def setup(bot: commands.Bot) -> None:
+async def setup(bot: commands.Bot) -> None:
     """Add this :obj:`discord.ext.command.Cog` to the identified :obj:`discord.ext.command.Bot`.
 
     Parameters
@@ -106,4 +106,4 @@ def setup(bot: commands.Bot) -> None:
         will be added to.
     
     """
-    bot.add_cog(BggBot(bot))
+    await bot.add_cog(BggBot(bot))

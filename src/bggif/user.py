@@ -34,7 +34,7 @@ class User:
         self.battle_net_account = kwargs.get('battlenetaccount', '').get('@value', '')
         self.steam_account = kwargs.get('steamaccount', '').get('@value', '')
         self.trade_rating = int(kwargs.get('traderating', '0').get('@value', '0'))
-        self.market_rating = int(kwargs.get('marketrating', '0').get('@value', '0'))
+        # self.market_rating = int(kwargs.get('marketrating', '0').get('@value', '0'))
         
     
     @classmethod
