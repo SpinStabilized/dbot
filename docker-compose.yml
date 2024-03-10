@@ -4,7 +4,7 @@ services:
   dbot:
     env_file: 
       - .env
-    image: dbot
+    image: spinstabilized/dbot:core
     container_name: dbot
     build:
       context: .
