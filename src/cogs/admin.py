@@ -31,7 +31,7 @@ class BotAdmin(commands.Cog):
             em.add_field(name='Up Time', value=str(datetime.datetime.now() - self.start_time))
             em.add_field(name='GitHub', value=f'[Source Repository](https://github.com/SpinStabilized/dbot)')
             em.add_field(name='Invite Me', 
-                         value=f'[Click Here](https://discordapp.com/oauth2/authorize?client_id={self.bot.user.id}&scope=bot&permissions=268905542)')
+                         value=f'[Click Here](https://discordapp.com/oauth2/authorize?client_id={self.bot.user.id}&scope=bot&permissions=1082332280896)')
 
             em.set_footer(text="DBot is powered by discord.py")
         await ctx.send(embed=em)
