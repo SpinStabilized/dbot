@@ -27,5 +27,4 @@ RUN useradd dbotuser && chown -R dbotuser /dbot_app
 USER dbotuser
 
 # During debugging, this entry point will be overridden. For more information, please refer to https://aka.ms/vscode-docker-python-debug
-CMD ["python", "-m", "http.server", "8080"]
 CMD ["python", "src/dbot.py"]

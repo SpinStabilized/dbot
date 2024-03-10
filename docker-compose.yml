@@ -6,6 +6,8 @@ services:
       - .env
     image: spinstabilized/dbot:core
     container_name: dbot
+    ports:
+      - 8080:8080/tcp
     build:
       context: .
       dockerfile: ./Dockerfile

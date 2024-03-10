@@ -7,13 +7,25 @@ from __future__ import annotations
 
 import discord
 import dotenv
+import http.server
 import os
 import platform
+import threading
 import traceback
 
 from discord.ext import commands
+from http.server import ThreadingHTTPServer
 
 import utils
+
+# The following simple HTTP handler is necessary to be compatible with Google
+# Cloud Run
+class MyHandler(http.server.SimpleHTTPRequestHandler):
+    def do_GET(self):
+        self.send_response(200)
+        self.send_header("Content-type", "text/plain")
+        self.end_headers()
+        self.wfile.write(b"Hello, world!")
 
 logger = utils.dbot_logger_config()
 
@@ -72,6 +84,11 @@ async def on_command_error(ctx, error):
         logger.error(''.join(traceback.format_exception(type(error), error, error.__traceback__)))
 
 if __name__ == "__main__":
+    server = ThreadingHTTPServer(("0.0.0.0", 8080), MyHandler)
+    server_thread = threading.Thread(target=server.serve_forever)
+    server_thread.daemon = True
+    server_thread.start()
+
     try:
         logger.info(f'Starting Bot...')
         bot.run(TOKEN)
