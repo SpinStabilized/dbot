@@ -20,8 +20,6 @@ class FunBot(commands.Cog):
     
     @commands.command(aliases=['cs'], help='cowsay [-e eye_string] [-f cowfile] [-l] [-n] [-T tongue_string] [-W column] [-bdgpstwy]')
     async def cowsay(self, ctx, *, message:str='Moo'):
-        logger.info(f'cowsay request from {ctx.author} on server {ctx.guild} in channel {ctx.channel}')
-        logger.info(f'\t{message}')
         async with ctx.typing():
             args = message.split(' ')
             data = subprocess.run([COWSAY] + args, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
@@ -29,8 +27,6 @@ class FunBot(commands.Cog):
 
     @commands.command(aliases=['ct'], help='cowthink [-e eye_string] [-f cowfile] [-l] [-n] [-T tongue_string] [-W column] [-bdgpstwy]')
     async def cowthink(self, ctx, *, message:str='Moo'):
-        logger.info(f'cowthink request from {ctx.author} on server {ctx.guild} in channel {ctx.channel}')
-        logger.info(f'\t{message}')
         async with ctx.typing():
             args = message.split(' ')
             data = subprocess.run([COWTHINK] + args,
@@ -41,7 +37,6 @@ class FunBot(commands.Cog):
 
     @commands.command(help='fortune [-afilosw] [-m pattern] [-n number]')
     async def fortune(self, ctx):
-        logger.info(f'fortune request from {ctx.author} on server {ctx.guild} in channel {ctx.channel}')
         async with ctx.typing():
             data = subprocess.run([FORTUNE], 
                    stdout=subprocess.PIPE,

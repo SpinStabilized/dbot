@@ -22,7 +22,6 @@ class BotAdmin(commands.Cog):
     @commands.command(name='about', help='About DBot')
     async def about(self, ctx) -> None:
         up = self.start_time - datetime.datetime.now()
-        logger.info(f'about request from {ctx.author} on server {ctx.guild} in channel {ctx.channel}')
         async with ctx.typing():
             '''Shows info about bot'''
             em = discord.Embed(color=discord.Color.green())
@@ -44,7 +43,6 @@ class BotAdmin(commands.Cog):
 
     @commands.command(help='Advanced Help')
     async def advanced_help(self, ctx):
-        logger.info(f'advanced_help request from {ctx.author} on server {ctx.guild} in channel {ctx.channel}')
         em = discord.Embed(color=discord.Color.dark_gold())
         em.title = "Advanced Help"
         em.description = f'For more help information [visit the help homepage](https://spinstabilized.github.io/projects/dbot/).'
@@ -52,8 +50,6 @@ class BotAdmin(commands.Cog):
 
     @commands.command(help='A handy calculator.')
     async def calc(self, ctx, calculation):
-        logger.info(f'calc request from {ctx.author} on server {ctx.guild} in channel {ctx.channel}')
-        logger.info(f'\t{calculation}')
         async with ctx.typing():
             try:
                 result = utils.eval_expr(calculation)
@@ -67,13 +63,11 @@ class BotAdmin(commands.Cog):
     @commands.command(hidden=True)
     @utils.dev_only()
     async def log_get(self, ctx):
-        logger.info(f'Log file requested by authorized user {ctx.author} on server {ctx.guild} in channel {ctx.channel}')
         await ctx.reply(file=discord.File(str(utils.DBOT_LOG_FILE)))
 
     @commands.command(hidden=True)
     @utils.dev_only()
     async def log_tail(self, ctx, n: int = 10):
-        logger.info(f'Log tail of {n} lines requested by authorized user {ctx.author} on server {ctx.guild} in channel {ctx.channel}')
         log_lines = ''
         with open(utils.DBOT_LOG_FILE, 'r') as log:
             log_lines = ''.join(log.readlines()[-n:])
@@ -81,7 +75,6 @@ class BotAdmin(commands.Cog):
 
     @commands.command(help='Check DBot Latency')
     async def ping(self, ctx):
-        logger.info(f'ping request from {ctx.author} on server {ctx.guild} in channel {ctx.channel}')
         async with ctx.typing():
             em = discord.Embed(color=discord.Color.green())
             em.title = "Ping Response"
@@ -91,7 +84,6 @@ class BotAdmin(commands.Cog):
     @commands.command(aliases=['sd'], hidden=True)
     @utils.dev_only()
     async def shutdown(self, ctx) -> None:
-        logger.warning(f'SHUTDOWN REQUESTED FROM VALID DEVELOPER {ctx.author} on server {ctx.guild} in channel {ctx.channel}')
         logger.warning(f'Providing most recent log before shutdown.')
         await ctx.send(f"DBot is shutting down at {ctx.author}'s request.")
         await ctx.send(f'Providing most recent log before shutdown.')
@@ -102,7 +94,6 @@ class BotAdmin(commands.Cog):
 
     @commands.command(name='uptime', help='DBot Uptime')
     async def uptime(self, ctx) -> None:
-        logger.info(f'uptime request from {ctx.author} on server {ctx.guild} in channel {ctx.channel}')
         up = self.start_time - datetime.datetime.now()
         async with ctx.typing():
             '''Current bot instance uptime'''
