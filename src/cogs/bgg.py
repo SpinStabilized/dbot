@@ -22,7 +22,7 @@ class BggBot(commands.Cog):
     
     @commands.command(aliases=['bggh'], help='Get the top n games from the BGG Hot list. Default 10, max 50.')
     async def bgg_hot(self, ctx, *, number: int=10) -> None:
-        logger.info(f'{ctx.author} requested the top {number} hottest games from BGG')
+        logger.info(f'BGG request for the top {number} hottest games from {ctx.author} on server {ctx.guild} in channel {ctx.channel}')
         embed_list = []
         async with ctx.typing():
             hot_games = await bggif.hot.HotGame.get_hot_games()
@@ -34,7 +34,8 @@ class BggBot(commands.Cog):
     @commands.command(help='Search for games on BGG.')
     async def bgg_search(self, ctx, *search_str) -> None:
         joined_search = '+'.join(search_str)
-        logger.info(f'{ctx.author} performed a search on BGG: {search_str}')
+        logger.info(f'BGG search from {ctx.author} on server {ctx.guild} in channel {ctx.channel}')
+        logger.info(f'\t{search_str}')
         items = None
         async with ctx.typing():
             items = await bggif.search.SearchItem.search(joined_search)
@@ -42,7 +43,8 @@ class BggBot(commands.Cog):
 
     @commands.command(aliases=['bggu'], help='Get info on a BGG user.')
     async def bgg_user(self, ctx, *, username: str='') -> None:
-        logger.info(f'{ctx.author} requested info on BGG user {username}.')
+        logger.info(f'BGG user search from {ctx.author} on server {ctx.guild} in channel {ctx.channel}')
+        logger.info(f'\t{username}')
         async with ctx.typing():
             user = await bggif.user.User.get_user(username)
             user_info = user_embed(ctx, user)
