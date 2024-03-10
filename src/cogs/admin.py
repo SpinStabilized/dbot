@@ -27,7 +27,7 @@ class BotAdmin(commands.Cog):
             em = discord.Embed(color=discord.Color.green())
             em.title = 'About DBot'
             em.set_author(name=ctx.author.name, icon_url=ctx.author.default_avatar)
-            em.description = f'The DBot\n'
+            em.description = f'The DBot'
             em.add_field(name='Servers', value=len(self.bot.guilds))
             em.add_field(name='Bot Latency', value=f"{self.bot.ws.latency * 1000:.0f} ms")
             em.add_field(name='Up Time', value=str(datetime.datetime.now() - self.start_time))
