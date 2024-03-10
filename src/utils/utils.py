@@ -62,7 +62,7 @@ def dev_only():
         devs = [int(d) for d in devs_raw.split(';')]
         if ctx.author.id in devs:
             return True
-        logger.warn(f'Unauthorized Command Use Attempted By {ctx.author}.')
+        logger.warn(f'Unauthorized Command Use Attempted By {ctx.author} from server {ctx.guild} on channel {ctx.channel}.')
         # 
         await ctx.reply('You are not authorized to use this command.')
         raise commands.MissingPermissions(['developer'])

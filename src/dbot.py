@@ -60,6 +60,10 @@ async def on_ready():
         except Exception as e:
             logger.error(e)
 
+@bot.before_invoke
+async def log_command(ctx):
+    logger.info(f'User {ctx.author} on server {ctx.guild} in channel {ctx.channel} invoked command {ctx.command.name} from cog {ctx.command.cog_name}')
+
 @bot.event
 async def on_guild_join(g):
     await bot.change_presence(activity=discord.Game(f'with {len(bot.guilds)} servers'))
