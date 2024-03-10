@@ -3,6 +3,8 @@ from __future__ import annotations
 
 import datetime
 import discord
+import os
+import platform
 
 from discord.ext import commands
 
@@ -25,7 +27,7 @@ class BotAdmin(commands.Cog):
             em = discord.Embed(color=discord.Color.green())
             em.title = 'About DBot'
             em.set_author(name=ctx.author.name, icon_url=ctx.author.default_avatar)
-            em.description = 'The DBot'
+            em.description = f'The DBot\n'
             em.add_field(name='Servers', value=len(self.bot.guilds))
             em.add_field(name='Bot Latency', value=f"{self.bot.ws.latency * 1000:.0f} ms")
             em.add_field(name='Up Time', value=str(datetime.datetime.now() - self.start_time))
@@ -33,6 +35,9 @@ class BotAdmin(commands.Cog):
             em.add_field(name='Invite Me', 
                          value=f'[Click Here](https://discordapp.com/oauth2/authorize?client_id={self.bot.user.id}&scope=bot&permissions=1082332280896)')
 
+            em.add_field(name='discord.py Version', value=f'{discord.__version__}')
+            em.add_field(name='Python Version', value=f'{platform.python_version()}')
+            em.add_field(name='Environment', value=f'{platform.system()} {platform.release()} ({os.name})')
             em.set_footer(text="DBot is powered by discord.py")
         await ctx.send(embed=em)
 
