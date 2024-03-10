@@ -7,9 +7,9 @@ import utils
 
 logger = utils.get_dbot_logger()
 
-COWSAY = '/opt/homebrew/bin/cowsay'#'/usr/games/cowsay'
-COWTHINK = '/opt/homebrew/bin/cowthink'#'/usr/games/cowthink'
-FORTUNE = '/opt/homebrew/bin/fortune'#'/usr/games/fortune'
+COWSAY = '/usr/games/cowsay'
+COWTHINK = '/usr/games/cowthink'
+FORTUNE = '/usr/games/fortune'
 
 class FunBot(commands.Cog):
     """Some fun commands."""
