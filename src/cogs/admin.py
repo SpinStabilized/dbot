@@ -50,6 +50,7 @@ class BotAdmin(commands.Cog):
 
     @commands.command(help='A handy calculator.')
     async def calc(self, ctx, calculation):
+        logger.info(f'\t{calculation}')
         async with ctx.typing():
             try:
                 result = utils.eval_expr(calculation)
@@ -68,6 +69,7 @@ class BotAdmin(commands.Cog):
     @commands.command(hidden=True)
     @utils.dev_only()
     async def log_tail(self, ctx, n: int = 10):
+        logger.info(f'\t{n} lines of the logfile requested')
         log_lines = ''
         with open(utils.DBOT_LOG_FILE, 'r') as log:
             log_lines = ''.join(log.readlines()[-n:])

@@ -22,6 +22,7 @@ class BggBot(commands.Cog):
     
     @commands.command(aliases=['bggh'], help='Get the top n games from the BGG Hot list. Default 10, max 50.')
     async def bgg_hot(self, ctx, *, number: int=10) -> None:
+        logger.info(f'\tTop {number} games requested.')
         embed_list = []
         async with ctx.typing():
             hot_games = await bggif.hot.HotGame.get_hot_games()
@@ -32,6 +33,7 @@ class BggBot(commands.Cog):
 
     @commands.command(help='Search for games on BGG.')
     async def bgg_search(self, ctx, *search_str) -> None:
+        logger.info(f'\tBGG Search on {search_str}')
         joined_search = '+'.join(search_str)
         items = None
         async with ctx.typing():
@@ -40,6 +42,7 @@ class BggBot(commands.Cog):
 
     @commands.command(aliases=['bggu'], help='Get info on a BGG user.')
     async def bgg_user(self, ctx, *, username: str='') -> None:
+        logger.info(f'\tSearching for {username}')
         async with ctx.typing():
             user = await bggif.user.User.get_user(username)
             user_info = user_embed(ctx, user)

@@ -19,7 +19,8 @@ class RollDice(commands.Cog):
         logger.info('RollDice Cog Loaded')
     
     @commands.command(aliases=['r'], help='Simulates rolling dice.')
-    async def roll(self, ctx, *, dice_string: str = None) -> None:        
+    async def roll(self, ctx, *, dice_string: str = None) -> None:
+        logger.info(f'\t{dice_string}')        
         roll_exception = None
         async with ctx.typing():
             try:

@@ -20,6 +20,7 @@ class FunBot(commands.Cog):
     
     @commands.command(aliases=['cs'], help='cowsay [-e eye_string] [-f cowfile] [-l] [-n] [-T tongue_string] [-W column] [-bdgpstwy]')
     async def cowsay(self, ctx, *, message:str='Moo'):
+        logger.info(f'\t{message}')
         async with ctx.typing():
             args = message.split(' ')
             data = subprocess.run([COWSAY] + args, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
@@ -27,6 +28,7 @@ class FunBot(commands.Cog):
 
     @commands.command(aliases=['ct'], help='cowthink [-e eye_string] [-f cowfile] [-l] [-n] [-T tongue_string] [-W column] [-bdgpstwy]')
     async def cowthink(self, ctx, *, message:str='Moo'):
+        logger.info(f'\t{message}')
         async with ctx.typing():
             args = message.split(' ')
             data = subprocess.run([COWTHINK] + args,
