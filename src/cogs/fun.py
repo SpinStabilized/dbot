@@ -3,6 +3,7 @@ import subprocess
 
 from discord.ext import commands
 
+import discord
 import utils
 
 logger = utils.get_dbot_logger()
@@ -37,14 +38,18 @@ class FunBot(commands.Cog):
                    text=True)
         await ctx.send(f'```{data.stdout}```')
 
-    @commands.command(help='fortune [-afilosw] [-m pattern] [-n number]')
+    @commands.command(help='Display a fortune from the famous UNIX command.')
     async def fortune(self, ctx):
         async with ctx.typing():
             data = subprocess.run([FORTUNE], 
                    stdout=subprocess.PIPE,
                    stderr=subprocess.STDOUT,
                    text=True)
-        await ctx.send(f'```{data.stdout}```')
+            em = discord.Embed(color=discord.Color.light_grey())
+            em.title = f'Fortune'
+            em.description = data.stdout
+        # await ctx.send(f'{data.stdout}')
+        await ctx.send(embed=em)
 
 
 async def setup(bot: commands.Bot) -> None:
