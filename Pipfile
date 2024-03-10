@@ -10,7 +10,6 @@ xmltodict = "*"
 requests = "*"
 discord-pretty-help = "*"
 numexpr = "*"
-matplotlib = "*"
 "discord.py" = "*"
 
 [dev-packages]
