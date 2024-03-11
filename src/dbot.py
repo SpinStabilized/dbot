@@ -20,18 +20,19 @@ import utils
 
 # The following simple HTTP handler is necessary to be compatible with Google
 # Cloud Run
-class MyHandler(http.server.SimpleHTTPRequestHandler):
+class FauxHandler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
         self.send_response(200)
         self.send_header("Content-type", "text/plain")
         self.end_headers()
-        self.wfile.write(b"Hello, world!")
+        self.wfile.write(b"DBot Container.")
 
 logger = utils.dbot_logger_config()
 
 dotenv.load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 PREFIX = os.getenv('DISCORD_BOT_PREFIX')
+PORT = int(os.getenv('PORT'))
 
 bot_intents = discord.Intents.default()
 bot_intents.message_content = True
@@ -88,7 +89,7 @@ async def on_command_error(ctx, error):
         logger.error(''.join(traceback.format_exception(type(error), error, error.__traceback__)))
 
 if __name__ == "__main__":
-    server = ThreadingHTTPServer(("0.0.0.0", 8080), MyHandler)
+    server = ThreadingHTTPServer(('0.0.0.0', PORT), FauxHandler)
     server_thread = threading.Thread(target=server.serve_forever)
     server_thread.daemon = True
     server_thread.start()
