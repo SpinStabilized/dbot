@@ -4,10 +4,10 @@ services:
   dbot:
     env_file: 
       - .env
-    image: spinstabilized/dbot:core
+    image: dbot-image
     container_name: dbot
     ports:
-      - 8080:8080/tcp
+      - 8080:8080
     build:
       context: .
       dockerfile: ./Dockerfile
