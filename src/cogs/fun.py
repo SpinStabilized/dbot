@@ -19,7 +19,7 @@ class FunBot(commands.Cog):
         self.bot = bot
         logger.info('FunBot Cog Loaded')
     
-    @commands.command(aliases=['cs'], help='cowsay [-e eye_string] [-f cowfile] [-l] [-n] [-T tongue_string] [-W column] [-bdgpstwy]')
+    @commands.command(aliases=['cs'], help='The cow says "Moo" or whatever you want.')
     async def cowsay(self, ctx, *, message:str='Moo'):
         logger.info(f'\t{message}')
         async with ctx.typing():
@@ -27,7 +27,7 @@ class FunBot(commands.Cog):
             data = subprocess.run([COWSAY] + args, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
         await ctx.send(f'```{data.stdout}```')
 
-    @commands.command(aliases=['ct'], help='cowthink [-e eye_string] [-f cowfile] [-l] [-n] [-T tongue_string] [-W column] [-bdgpstwy]')
+    @commands.command(aliases=['ct'], help='The cow thinks "Moo" or whatever you want.')
     async def cowthink(self, ctx, *, message:str='Moo'):
         logger.info(f'\t{message}')
         async with ctx.typing():
