@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import discord
+import os
 
 from discord.ext import commands
 
@@ -14,36 +15,40 @@ from typing import List
 
 logger = utils.get_dbot_logger()
 
+PREFIX = os.getenv('DISCORD_BOT_PREFIX')
+
 BGG_HOT_HELP_BRIEF = 'Get the top n games from the BGG Hot list. Default 10, max 50.'
-BGG_HOT_HELP_LONG = """
+BGG_HOT_HELP_LONG = f"""
+{BGG_HOT_HELP_BRIEF}
+
 Retrieve the top games from BGG where number is the number
 of games to check. The default is 10 games and the maximum
 is 50.
 
 Example:
-\t>dbot bgg_hot
+\t>{PREFIX}bgg_hot
 \tDisplay the top 10 games on BGG.
 
-\t>dbot bgg_hot 1
+\t>{PREFIX}bgg_hot 1
 \tDisplay the current #1 game on BGG.
 """
 
-BGG_SEARCH_HELP_BRIEF = 'Search for games on BGG.'
-BGG_SEARCH_HELP_LONG = """
-Search for the specified games on BGG.
+BGG_SEARCH_HELP_BRIEF = 'Search for the specified games on BGG.'
+BGG_SEARCH_HELP_LONG = f"""
+{BGG_SEARCH_HELP_BRIEF}
 
 Example:
-\t>dbot bgg_search Pathfinder
+\t>{PREFIX}bgg_search Pathfinder
 \tReturns up to 10 results associated with the search for Pathfinder
 
 """
 
-BGG_USER_HELP_BRIEF = 'Get info on a BGG user.'
-BGG_USER_HELP_LONG = """
-Search for the specified user on BGG.
+BGG_USER_HELP_BRIEF = 'Search for the specified user on BGG.'
+BGG_USER_HELP_LONG = f"""
+{BGG_USER_HELP_BRIEF}
 
 Example:
-\t>dbot bgg_user bjmclaughlin
+\t>{PREFIX}bgg_user bjmclaughlin
 \tReturns information on the BGG user specified.
 
 """

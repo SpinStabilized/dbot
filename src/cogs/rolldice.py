@@ -31,15 +31,41 @@ import utils
 
 logger = utils.get_dbot_logger()
 
+PREFIX = os.getenv('DISCORD_BOT_PREFIX')
+
+ROLL_HELP_BRIEF = 'Roll a virtual set of dice.'
+ROLL_HELP_LONG = f"""
+{ROLL_HELP_BRIEF}
+
+Example:
+\t>{PREFIX}roll 1d20
+\t[**20**] = 20
+
+"""
+
+ROLL_SIM_HELP_BRIEF = 'Dice roll simulator/statistics generator'
+ROLL_SIM_HELP_LONG = f"""
+{ROLL_SIM_HELP_BRIEF}
+
+Example:
+\t>{PREFIX}roll_sim 1d20
+\tDisplay a plot of the dice statistics.
+
+"""
+
 class RollDice(commands.Cog):
     """Dice rolling cog."""
 
     def __init__(self, bot: commands.Bot):
         self.bot = bot
         logger.info('RollDice Cog Loaded')
-    
-    @commands.command(aliases=['r'], help='Simulates rolling dice.')
-    async def roll(self, ctx, *, dice_string: str = None) -> None:
+
+    @commands.command(
+            aliases=['r'],
+            brief=ROLL_HELP_BRIEF,
+            help=ROLL_HELP_LONG,
+    )
+    async def roll(self, ctx, *, dice_string: str = commands.parameter(default='1d20', description='Dice roll expression')) -> None:
         logger.info(f'Roll request from {ctx.author}')
         logger.info(f'\t{dice_string}')
         
@@ -56,7 +82,10 @@ class RollDice(commands.Cog):
             await ctx.reply(f'{results} = {total}')
             logger.info(f'\tResult: {results} = {total}')
 
-    @commands.command(help='Dice roll simulator/statistics generator')
+    @commands.command(
+            brief=ROLL_SIM_HELP_BRIEF,
+            help=ROLL_SIM_HELP_LONG,
+    )
     async def roll_sim(self, ctx, *, dice_string: str = None) -> None:
         roll_exception = None
         async with ctx.typing():
@@ -213,7 +242,7 @@ class Die:
 
         ax.set_xlabel('Result')
         ax.set_ylabel('Probability Density')
-        ax.set_title(f'Histogram of {roll} Rolled {n:,} Times\n$\mu={mean:0.0f}, \sigma={stdev:0.2f}$')
+        ax.set_title(f'Histogram of {roll} Rolled {n:,} Times\n$\\mu={mean:0.0f}, \\sigma={stdev:0.2f}$')
         now = datetime.now()
         fname = f'/tmp/dbot_roll_sim_{now.strftime("%Y_%m_%d_%H_%M_%S")}.png'
         fig.tight_layout()

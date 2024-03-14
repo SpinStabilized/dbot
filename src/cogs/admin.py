@@ -12,14 +12,61 @@ import utils
 
 logger = utils.get_dbot_logger()
 
+PREFIX = os.getenv('DISCORD_BOT_PREFIX')
+
+ADMIN_ABOUT_HELP_BRIEF = 'About DBot'
+ADMIN_ABOUT_HELP_LONG = f"""
+{ADMIN_ABOUT_HELP_BRIEF}
+
+Example:
+\t>{PREFIX}about
+
+"""
+
+ADMIN_CALC_HELP_BRIEF = 'A handy calculator'
+ADMIN_CALC_HELP_LONG = f"""
+{ADMIN_CALC_HELP_BRIEF}
+
+A calculator that takes in a math expression and returns the result.
+
+Example:
+\t>dbot calc 1+1
+\t> 2
+
+\t>{PREFIX}calc cos(pi)
+\t>-1.0
+
+"""
+
+ADMIN_PING_HELP_BRIEF = 'Report the response latency to the bot in ms.'
+ADMIN_PING_HELP_LONG = f"""
+{ADMIN_PING_HELP_BRIEF}
+
+Example:
+\t>{PREFIX}ping
+
+"""
+
+ADMIN_UPTIME_HELP_BRIEF = 'The amount of time since DBot was started.'
+ADMIN_UPTIME_HELP_LONG = f"""
+{ADMIN_UPTIME_HELP_BRIEF}
+
+Example:
+\t>{PREFIX}uptime
+
+"""
+
 class BotAdmin(commands.Cog):
     """Administrative Commands"""
     def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
         logger.info('BotAdmin Cog Loaded')
         self.start_time = datetime.datetime.now()
-    
-    @commands.command(name='about', help='About DBot')
+
+    @commands.command(
+            brief=ADMIN_ABOUT_HELP_BRIEF,
+            help=ADMIN_ABOUT_HELP_LONG,
+    )
     async def about(self, ctx) -> None:
         up = self.start_time - datetime.datetime.now()
         async with ctx.typing():
@@ -41,15 +88,11 @@ class BotAdmin(commands.Cog):
             em.set_footer(text="DBot is powered by discord.py")
         await ctx.send(embed=em)
 
-    @commands.command(help='Advanced Help')
-    async def advanced_help(self, ctx):
-        em = discord.Embed(color=discord.Color.dark_gold())
-        em.title = "Advanced Help"
-        em.description = f'For more help information [visit the help homepage](https://spinstabilized.github.io/projects/dbot/).'
-        await ctx.send(embed=em)
-
-    @commands.command(help='A handy calculator.')
-    async def calc(self, ctx, calculation):
+    @commands.command(
+            brief=ADMIN_CALC_HELP_BRIEF,
+            help=ADMIN_CALC_HELP_LONG,
+    )
+    async def calc(self, ctx, calculation: str = commands.parameter(default='0', description='Math expression')):
         logger.info(f'\t{calculation}')
         async with ctx.typing():
             try:
@@ -75,7 +118,10 @@ class BotAdmin(commands.Cog):
             log_lines = ''.join(log.readlines()[-n:])
         await ctx.reply(f'```{log_lines}```')
 
-    @commands.command(help='Check DBot Latency')
+    @commands.command(
+            brief=ADMIN_PING_HELP_BRIEF,
+            help=ADMIN_PING_HELP_LONG,
+    )
     async def ping(self, ctx):
         async with ctx.typing():
             em = discord.Embed(color=discord.Color.green())
@@ -94,7 +140,10 @@ class BotAdmin(commands.Cog):
         
         await self.bot.close()
 
-    @commands.command(name='uptime', help='DBot Uptime')
+    @commands.command(
+            brief=ADMIN_UPTIME_HELP_BRIEF,
+            help=ADMIN_UPTIME_HELP_LONG,
+    )
     async def uptime(self, ctx) -> None:
         up = self.start_time - datetime.datetime.now()
         async with ctx.typing():
