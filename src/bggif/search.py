@@ -12,9 +12,12 @@ SITE_BASE_URL = 'https://boardgamegeek.com/boardgame/'
 
 class SearchItem:
     def __init__(self, **kwargs) -> None:
+        print(kwargs)
         self.id = int(kwargs.get('@id', '0'))
         self.name = kwargs.get('name', '').get('@value', '')
-        self.year_published = int(kwargs.get('yearpublished', '0').get('@value', '0'))
+        self.year_published = None
+        if 'yearpublished' in kwargs.keys():
+            self.year_published = int(kwargs['yearpublished'].get('@value', '0'))
     
     def __str__(self) -> str:
         return f'{self.name}'
@@ -33,6 +36,7 @@ class SearchItem:
                 if response.status == 200:
                     raw_xml = await response.text()
                     results = xmltodict.parse(raw_xml)['items'].get('item', None)
+                    results = [result for result in results if 'yearpublished' in result.keys()]
                     if results and len(results) > 10:
                         results = results[:10]
                     if results:

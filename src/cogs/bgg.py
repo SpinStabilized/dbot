@@ -14,14 +14,42 @@ from typing import List
 
 logger = utils.get_dbot_logger()
 
+BGG_HOT_HELP_BRIEF = 'Get the top n games from the BGG Hot list. Default 10, max 50.'
+BGG_HOT_HELP_LONG = """
+Retrieve the top games from BGG where number is the number
+of games to check. The default is 10 games and the maximum
+is 50.
+
+Example:
+\t>dbot bgg_hot
+\tDisplay the top 10 games on BGG.
+
+\t>dbot bgg_hot 1
+\tDisplay the current #1 game on BGG.
+"""
+
+BGG_SEARCH_HELP_BRIEF = 'Search for games on BGG.'
+BGG_SEARCH_HELP_LONG = """
+Search for the specified games on BGG.
+
+Example:
+\t>dbot bgg_search Pathfinder
+\tReturns up to 10 results associated with the search for Pathfinder
+
+"""
 class BggBot(commands.Cog):
     """Board Game Geek Commands"""
     def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
         logger.info('BggBot Cog Loaded')
     
-    @commands.command(aliases=['bggh'], help='Get the top n games from the BGG Hot list. Default 10, max 50.')
-    async def bgg_hot(self, ctx, *, number: int=10) -> None:
+    @commands.command(
+            aliases=['bggh'],
+            brief=BGG_HOT_HELP_BRIEF,
+            help=BGG_HOT_HELP_LONG,
+    )
+    async def bgg_hot(self, ctx, *, 
+            number: int = commands.parameter(default=10, description='Number of top games to retrieve.')) -> None:
         logger.info(f'\tTop {number} games requested.')
         embed_list = []
         async with ctx.typing():
@@ -31,10 +59,16 @@ class BggBot(commands.Cog):
         for e in embed_list:
             await ctx.reply(embed=e)
 
-    @commands.command(help='Search for games on BGG.')
-    async def bgg_search(self, ctx, *search_str) -> None:
-        logger.info(f'\tBGG Search on {search_str}')
-        joined_search = '+'.join(search_str)
+    @commands.command(
+            brief=BGG_SEARCH_HELP_BRIEF,
+            help=BGG_SEARCH_HELP_LONG,        
+        )
+    async def bgg_search(self, ctx,
+            *search_string: str
+        ) -> None:
+        logger.info(f'\tBGG Search on {search_string}')
+        joined_search = '+'.join(search_string)
+        logger.info(joined_search)
         items = None
         async with ctx.typing():
             items = await bggif.search.SearchItem.search(joined_search)
@@ -55,9 +89,10 @@ def search_item_embed(ctx, search_items: List[bggif.search.SearchItem]) -> disco
     response_strs = []
     if search_items:
         for i, item in enumerate(search_items):
+            year_published_string = f' - ©{item.year_published}' if item.year_published else ''
             search_embed.add_field(
                 name=f'{i+1:02})',
-                value=f'[{item.name}]({item.bgg_url}) - (c){item.year_published}',
+                value=f'[{item.name}]({item.bgg_url}){year_published_string}',
                 inline=False
             )
     else:
