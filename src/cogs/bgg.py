@@ -37,6 +37,16 @@ Example:
 \tReturns up to 10 results associated with the search for Pathfinder
 
 """
+
+BGG_USER_HELP_BRIEF = 'Get info on a BGG user.'
+BGG_USER_HELP_LONG = """
+Search for the specified user on BGG.
+
+Example:
+\t>dbot bgg_user bjmclaughlin
+\tReturns information on the BGG user specified.
+
+"""
 class BggBot(commands.Cog):
     """Board Game Geek Commands"""
     def __init__(self, bot: commands.Bot) -> None:
@@ -74,8 +84,12 @@ class BggBot(commands.Cog):
             items = await bggif.search.SearchItem.search(joined_search)
         await ctx.reply(embed=search_item_embed(ctx, items))
 
-    @commands.command(aliases=['bggu'], help='Get info on a BGG user.')
-    async def bgg_user(self, ctx, *, username: str='') -> None:
+    @commands.command(
+            aliases=['bggu'],
+            brief=BGG_USER_HELP_BRIEF,
+            help=BGG_USER_HELP_LONG,        
+        )
+    async def bgg_user(self, ctx, *, username: str = commands.parameter(default='', description='BGG Username')) -> None:
         logger.info(f'\tSearching for {username}')
         async with ctx.typing():
             user = await bggif.user.User.get_user(username)
