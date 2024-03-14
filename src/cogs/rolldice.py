@@ -1,11 +1,31 @@
 # -*- coding: utf-8 -*-
 from __future__ import annotations
 
+import argparse
+from datetime import datetime
+import os
+import pathlib
 import random
 import re
+import statistics
 
+###############################################################################
+# Configure the MPLCONFIGDIR environmental variable to give matplotlib a place
+# to work in the user access area in the Docker container.
+###############################################################################
+mpl_config = pathlib.Path.cwd() / 'mpl_config'
+mpl_config.mkdir(parents=True, exist_ok=True)
+os.environ['MPLCONFIGDIR'] = str(mpl_config)
+###############################################################################
+
+import matplotlib as mpl
+mpl.use('Agg')
+import matplotlib.pyplot as plt
+import matplotlib.ticker as mtick
+
+import discord
 from discord.ext import commands
-from typing import List, Union
+from typing import List, Tuple, Union
 
 import utils
 
@@ -20,7 +40,9 @@ class RollDice(commands.Cog):
     
     @commands.command(aliases=['r'], help='Simulates rolling dice.')
     async def roll(self, ctx, *, dice_string: str = None) -> None:
-        logger.info(f'\t{dice_string}')        
+        logger.info(f'Roll request from {ctx.author}')
+        logger.info(f'\t{dice_string}')
+        
         roll_exception = None
         async with ctx.typing():
             try:
@@ -33,6 +55,36 @@ class RollDice(commands.Cog):
         else:
             await ctx.reply(f'{results} = {total}')
             logger.info(f'\tResult: {results} = {total}')
+
+    @commands.command(help='Dice roll simulator/statistics generator')
+    async def roll_sim(self, ctx, *, dice_string: str = None) -> None:
+        roll_exception = None
+        async with ctx.typing():
+            parser = argparse.ArgumentParser()
+            parser.add_argument('-n', '--n_times', default=10000, type=int)
+            parser.add_argument('roll_spec', nargs='*')
+            args = parser.parse_args(dice_string.split())
+            args.roll_spec = ' '.join(args.roll_spec)
+
+            logger.info(f'Simulating dice roll from {ctx.author}')
+            logger.info(f'\t{dice_string}')
+            try:
+                fname = Die.dice_sim(args.roll_spec, args.n_times)
+            except SyntaxError as se:
+                roll_exception = se
+                logger.exception(se)
+            
+        if roll_exception:
+            await ctx.reply(f'Error In Dice Roll')
+        else:
+            p_file = discord.File(fname, filename='image.png')
+            embed = discord.Embed(
+                title='Dice Roll Simulator',
+                color=0x00ff00
+            )
+            embed.set_image(url='attachment://image.png')
+            await ctx.reply(embed=embed, file=p_file)
+            os.remove(fname)
 
 
 class Die:
@@ -137,6 +189,38 @@ class Die:
         
         result = utils.eval_expr(roll_exp)
         return roll, result
+
+    @staticmethod
+    def dice_sim(roll: str, n: int = 100000) -> Tuple[float, float, str]:
+        """Simulate dice rolls repeatedly to collect statistics.
+
+        Parameters
+        ----------
+        roll
+            The dice roll specification.
+        n
+            Number of iterations to execute.
+
+        """
+        results = [Die.dice_roller(roll)[1] for _ in range(n)]
+        r_min = min(results)
+        r_max = max(results)
+        mean = statistics.fmean(results)
+        stdev = statistics.stdev(results)
+        num_bins = (r_max - r_min) + 1
+        fig, ax = plt.subplots()
+        h_data, bins, patches = ax.hist(results, num_bins, density=True)
+
+        ax.set_xlabel('Result')
+        ax.set_ylabel('Probability Density')
+        ax.set_title(f'Histogram of {roll} Rolled {n:,} Times\n$\mu={mean:0.0f}, \sigma={stdev:0.2f}$')
+        now = datetime.now()
+        fname = f'/tmp/dbot_roll_sim_{now.strftime("%Y_%m_%d_%H_%M_%S")}.png'
+        fig.tight_layout()
+        fig.savefig(fname)
+        logger.debug(fname)
+
+        return fname
 
     def __str__(self):
         ret_val = str(self.__value)
