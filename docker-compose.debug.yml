@@ -4,11 +4,10 @@ services:
   dbot_debug:
     env_file: 
       - .env
-    image: dbot-debug-image
-    container_name: dbot_debug
+    image: spinstabilized/dbot:dev
+    container_name: dbot_dev
     ports:
       - 5678:5678
-      - 8080:8080
     build:
       context: .
       dockerfile: ./Dockerfile

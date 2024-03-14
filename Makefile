@@ -19,6 +19,11 @@ build_debug: freeze ## Build and launch container with python debugger port avai
 	@docker-compose -f "docker-compose.debug.yml" up -d --build
 .PHONY: build_debug
 
+deploy: freeze
+	@echo "Building the container and pushing to docker repository"
+	@docker-compose -f "docker-compose.yml" create --build
+	@docker push spinstabilized/dbot  
+
 help: ## Show this help
 	@egrep -h '\s##\s' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
 .PHONY: help
