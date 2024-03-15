@@ -66,7 +66,6 @@ class RollDice(commands.Cog):
             help=ROLL_HELP_LONG,
     )
     async def roll(self, ctx, *, dice_string: str = commands.parameter(default='1d20', description='Dice roll expression')) -> None:
-        logger.info(f'Roll request from {ctx.author}')
         logger.info(f'\t{dice_string}')
         
         roll_exception = None
@@ -95,8 +94,9 @@ class RollDice(commands.Cog):
             args = parser.parse_args(dice_string.split())
             args.roll_spec = ' '.join(args.roll_spec)
 
-            logger.info(f'Simulating dice roll from {ctx.author}')
             logger.info(f'\t{dice_string}')
+            if args.n_times > 10000:
+                args.n_times = 10000
             try:
                 fname = Die.dice_sim(args.roll_spec, args.n_times)
             except SyntaxError as se:
@@ -220,7 +220,7 @@ class Die:
         return roll, result
 
     @staticmethod
-    def dice_sim(roll: str, n: int = 100000) -> Tuple[float, float, str]:
+    def dice_sim(roll: str, n: int = 10000) -> Tuple[float, float, str]:
         """Simulate dice rolls repeatedly to collect statistics.
 
         Parameters
