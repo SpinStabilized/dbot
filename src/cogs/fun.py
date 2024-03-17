@@ -63,7 +63,7 @@ Example:
 \t-- Mister Peabody
 """
 
-class FunBot(commands.Cog):
+class FunBot(commands.Cog, name='Some additional "fun"ctionality.'):
     """Some fun commands."""
 
     def __init__(self, bot:commands.Bot) -> None:
