@@ -102,7 +102,7 @@ class FunBot(commands.Cog, name='Some additional "fun"ctionality.'):
             brief=FUN_FORTUNE_HELP_BRIEF,
             help=FUN_FORTUNE_HELP_LONG,
     )
-    async def fortune(self, ctx: commands.context.Context):
+    async def fortune(self, ctx: commands.Context):
         """Displays a fortune cookie message.
 
         This command generates a random fortune message using the 'fortune'
@@ -137,7 +137,7 @@ class FunBot(commands.Cog, name='Some additional "fun"ctionality.'):
             brief=FUN_COWSAY_HELP_BRIEF,
             help=FUN_COWSAY_HELP_LONG,
     )
-    async def cowsay(self, ctx: commands.context.Context, *, 
+    async def cowsay(self, ctx: commands.Context, *, 
         message: str = commands.parameter(default='Moo', description='Message for the cow to say.')):
         """Generates a cow ASCII art with a custom message using the 'cowsay' command-line tool.
 
@@ -175,7 +175,7 @@ class FunBot(commands.Cog, name='Some additional "fun"ctionality.'):
             brief=FUN_COWTHINK_HELP_BRIEF,
             help=FUN_COWTHINK_HELP_LONG,
     )
-    async def cowthink(self, ctx: commands.context.Context, *,
+    async def cowthink(self, ctx: commands.Context, *,
         message:str = commands.parameter(default='Moo', description='Message for the cow to think.')):
         """Generates a cow ASCII art with a custom message using the 'cowthink' command-line tool.
 
