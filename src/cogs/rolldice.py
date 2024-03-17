@@ -53,7 +53,7 @@ Example:
 
 """
 
-class RollDice(commands.Cog):
+class RollDice(commands.Cog, name='Dice Rolling'):
     """Dice rolling cog."""
 
     def __init__(self, bot: commands.Bot):
