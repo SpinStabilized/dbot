@@ -18,7 +18,7 @@
 <br />
 <p align="center">
   <a href="https://github.com/SpinStabilized/dbot">
-    <img src="resources/d20.png" alt="Logo" width="80" height="80">
+    <img src="resources/images/d20.png" alt="Logo" width="80" height="80">
   </a>
 
   <h3 align="center">DBot</h3>
@@ -217,4 +217,4 @@ Project Link: [https://github.com/SpinStabilized/dbot](https://github.com/SpinSt
 [license-url]: https://github.com/SpinStabilized/dbot/blob/main/LICENSE
 <!-- [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/othneildrew -->
-[product-screenshot]: resources/dbot_screenshot.png
+[product-screenshot]: resources/images/dbot_screenshot.png
