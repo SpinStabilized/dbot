@@ -56,7 +56,7 @@ Example:
 
 """
 
-class BotAdmin(commands.Cog):
+class BotAdmin(commands.Cog, name='DBot Administration Functions'):
     """Administrative Commands"""
     def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
