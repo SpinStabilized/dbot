@@ -52,7 +52,7 @@ Example:
 \tReturns information on the BGG user specified.
 
 """
-class BggBot(commands.Cog):
+class BggBot(commands.Cog, name='Board Game Geek Functions'):
     """Board Game Geek Commands"""
     def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
