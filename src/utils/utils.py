@@ -4,14 +4,13 @@ import logging.handlers
 import math
 import numexpr as ne
 import os
-import platform
 
 from discord.ext import commands
 from pathlib import Path
 from typing import Final
 
 DBOT_LOGGER_ID: Final[str] = 'dbot'
-logger = logging.getLogger(DBOT_LOGGER_ID)
+logger: logging.Logger = logging.getLogger(DBOT_LOGGER_ID)
 
 DBOT_LOG_FILE: Final[Path] = Path(f'logs/{DBOT_LOGGER_ID}.log')
 
@@ -28,20 +27,19 @@ def dbot_logger_config(level: int = logging.INFO) -> logging.Logger:
         `logging` module.
     
     """
-    host: str = platform.node()
     logger: logging.Logger = logging.getLogger(DBOT_LOGGER_ID)
     logger.setLevel(level)
-    log_format = logging.Formatter(
+    log_format: logging.Formatter = logging.Formatter(
                     fmt='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     datefmt='%Y-%m-%d %H:%M:%S'
     )
-    log_dir = DBOT_LOG_FILE.parents[0]
+    log_dir: Path = DBOT_LOG_FILE.parents[0]
     log_dir.mkdir(parents=True, exist_ok=True)
-    file_handler = logging.handlers.TimedRotatingFileHandler(
-                        filename=str(DBOT_LOG_FILE),
-                        encoding='utf-8',
-                        when='midnight',
-                        backupCount=10
+    file_handler: logging.handlers.TimedRotatingFileHandler = logging.handlers.TimedRotatingFileHandler(
+        filename=str(DBOT_LOG_FILE),
+        encoding='utf-8',
+        when='midnight',
+        backupCount=10
     )
     file_handler.setFormatter(log_format)
     console_handler: logging.handlers.StreamHandler = logging.StreamHandler()
@@ -57,16 +55,16 @@ def get_dbot_logger() -> logging.Logger:
     return logging.getLogger(DBOT_LOGGER_ID)
 
 def dev_only():
-    async def wrapper(ctx):
-        devs_raw = os.getenv('DISCORD_BOT_DEVELOPERS')
-        devs = [int(d) for d in devs_raw.split(';')]
+    async def wrapper(ctx: commands.Context) -> bool:
+        devs_raw: str = os.getenv('DISCORD_BOT_DEVELOPERS')
+        devs: list[int] = [int(d) for d in devs_raw.split(';')]
         if ctx.author.id in devs:
             return True
-        logger.warn(f'Unauthorized Command Use Attempted By {ctx.author} from server {ctx.guild} on channel {ctx.channel}.')
-        # 
-        await ctx.reply('You are not authorized to use this command.')
-        raise commands.MissingPermissions(['developer'])
-        return False
+        else:
+            logger.warn(f'Unauthorized Command Use Attempted By {ctx.author} from server {ctx.guild} on channel {ctx.channel}.')
+            await ctx.reply('You are not authorized to use this command.')
+            raise commands.MissingPermissions(['developer'])
+
     return commands.check(wrapper)
 
 def eval_expr(expr:str='0') -> float:
