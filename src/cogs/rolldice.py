@@ -351,7 +351,7 @@ class Die:
 
         Returns
         -------
-        (int): True if the last roll was a critical hit.
+        (bool): True if the last roll was a critical hit.
 
         """
         return self.__value == self.sides
